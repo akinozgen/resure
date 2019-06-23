@@ -1,0 +1,22 @@
+:root {
+  --navbar-background-color: #00B1FF;
+}
+
+#app .navbar.navbar-resure {
+  background-color: var(--navbar-background-color);
+}
+
+#app .navbar-resure a {
+  color: white;
+}
+
+#app .navbar-resure .dropdown-menu a {
+  color: black;
+}
+
+#app .navbar-resure .logo {
+  background-image: url("../img/logo@2x.png");
+  height: 50px;
+  width: 130px;
+  background-size: 100%;
+}
