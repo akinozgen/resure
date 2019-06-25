@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     public function index()
     {
@@ -19,10 +15,10 @@ class HomeController extends Controller
     
     public function settings(Request $request)
     {
-        $user = Auth::user()->toArray();
+        $user = Auth::user();
         
         return view('users.settings', [
-            'user' => $user
+            'user' => $user->toArray()
         ]);
     }
     

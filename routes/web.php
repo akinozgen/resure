@@ -20,6 +20,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('auth/callback/{provider}', 'SocialAuthController@callback');
+Route::get('auth/redirect/{provider}', 'SocialAuthController@redirect');
+
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/settings', 'HomeController@settings')->name('settings');

@@ -43,5 +43,11 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
+    
+    'twitter' => [
+        'client_id' => 'ccFFvBDMohKD1R6haVOTtAy5T',
+        'client_secret' => 'ErX7ikdACDaIXzycWVYVs4UZIhYvmv1vURmVLJZ4chCORfsYRp',
+        'redirect' => 'http://resure.space/auth/callback/twitter',
+    ],
 
 ];

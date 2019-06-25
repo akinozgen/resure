@@ -8,17 +8,17 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   
   <title>{{ config('app.name', 'Laravel') }}</title>
-  
-  <!-- Scripts -->
-  <script src="{{ asset('public/js/app.js') }}" defer></script>
+  <script src="https://kit.fontawesome.com/4bd12d0ec5.js"></script>
   
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
   
   <!-- Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
   <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
   <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
+  <script src="{{ asset('public/js/app.standard.js') }}"></script>
 </head>
 <body>
 <div id="app">
@@ -85,6 +85,26 @@
   <main class="py-4">
     @yield('content')
   </main>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="{{ asset('public/js/jquery.toast.min.js') }}"></script>
+  <script>
+    @if (isset($errors))
+      @foreach($errors as $error)
+        const error{{ $error->name }} = Toast({
+          title: '{{ $error->title }}',
+          description: '{{ $error->description }}',
+          icon: '{{ $error->icon }}',
+          loader: '{{ $error->loader }}',
+          loaderBg: '{{ $error->loaderBg }}',
+          timeout: parseFloat('{{ $error->timeout }}')
+        });
+        
+        error{{ $error->name }}();
+      @endforeach
+    @endif
+  </script>
 </div>
 </body>
 </html>
