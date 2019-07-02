@@ -10,15 +10,17 @@
   <title>{{ config('app.name', 'Laravel') }}</title>
   <script src="https://kit.fontawesome.com/4bd12d0ec5.js"></script>
   
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+  <script src="{{ asset('public/js/app.standard.js') }}"></script>
+  
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
   
   <!-- Styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
-  <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
-  <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
-  <script src="{{ asset('public/js/app.standard.js') }}"></script>
+  <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
+  <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 </head>
 <body>
 <div id="app">
@@ -27,10 +29,10 @@
       <a class="navbar-brand" href="{{ url('/') }}" title="Resure - Homepage">
         <div class="logo"></div>
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-              aria-label="{{ __('Toggle navigation') }}">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="{{ __('Toggle navigation') }}">
+          <span class="navbar-toggler-icon"></span>
+        </button>
       
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left Side Of Navbar -->
@@ -85,13 +87,12 @@
   <main class="py-4">
     @yield('content')
   </main>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="{{ asset('public/js/jquery.toast.min.js') }}"></script>
+  <script src="{{ asset('/js/jquery.toast.min.js') }}"></script>
   <script>
-    @if (isset($errors))
-      @foreach($errors as $error)
+    @if (isset($app_errors))
+      @foreach($app_errors as $error)
         const error{{ $error->name }} = Toast({
           title: '{{ $error->title }}',
           description: '{{ $error->description }}',

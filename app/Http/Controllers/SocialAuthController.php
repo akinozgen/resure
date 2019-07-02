@@ -16,7 +16,9 @@ class SocialAuthController extends Controller
         $user = $this->createOrGetUser(Socialite::driver($provider));
         auth()->login($user);
         
-        return redirect()->route('profile');
+        return redirect()->route('react_root')->with('auth', [
+            'user' => $user
+        ]);
     }
     
     private function createOrGetUser(Provider $provider)
@@ -37,7 +39,7 @@ class SocialAuthController extends Controller
                 'provider_id' => $providerUser->getId(),
                 'provider' => $providerName,
                 'twitter_token' => $providerUser->token,
-                'pp_url' => $providerUser->user['profile_image_url'],
+                'pp_url' => $providerUser->avatar_original,
                 'banner_url' => $providerUser->user['profile_banner_url'],
                 'bio' => $providerUser->user['description'],
                 'twitter_data' => json_encode($providerUser->user, JSON_PRETTY_PRINT)
@@ -50,7 +52,7 @@ class SocialAuthController extends Controller
     public function logout(Request $request)
     {
         AuthFacade::logout();
-        return redirect()->route('home');
+        return redirect()->route('react_root');
     }
     
     public function redirect($provider)

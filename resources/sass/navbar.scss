@@ -15,20 +15,8 @@
 }
 
 #app .navbar-resure .logo {
-  background-image: url("../img/logo@2x.png");
+  background-image: url("/img/logo@2x.png");
   height: 50px;
   width: 130px;
   background-size: 100%;
 }
-
-.uploader img {
-  cursor: pointer;
-}
-
-.uploader input {
-  visibility: hidden;
-  display: none;
-}
-
-
-

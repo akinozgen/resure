@@ -30,4 +30,9 @@ class HomeController extends Controller
             'user' => $user
         ]);
     }
+    
+    public function profile_save_post(Request $request)
+    {
+    
+    }
 }

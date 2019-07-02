@@ -11,3 +11,39 @@ const Toast = function ({ title, description, icon, priority, bgColor, loader, t
     });
   }
 };
+
+$(document).ready(function (e) {
+  
+  const $uploaders = $('.uploader');
+  $uploaders.each(function (index, $uploader) {
+    $uploader = $($uploader);
+    const input = $uploader.find('input');
+    const img = $uploader.find('img');
+    
+    input.hide();
+    
+    input.on('click', function (e) {
+      e.stopPropagation();
+    });
+    
+    input.on('change', function (e) {
+      e.stopPropagation();
+
+      if (this.files && this.files[0]) {
+        var reader = new FileReader();
+    
+        reader.onload = function(_e) {
+          img.attr('src', _e.target.result);
+        };
+    
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+    
+    $uploader.on('click', function (event) {
+      event.stopPropagation();
+      input.click();
+    });
+  });
+  
+});
