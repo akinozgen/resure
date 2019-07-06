@@ -5,12 +5,12 @@ import {Loader} from "./Loader";
 class LoginUserMenu extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.checkAuthState = this.checkAuthState.bind(this);
     this.performLogout = this.performLogout.bind(this);
     this.performLogin = this.performLogin.bind(this);
   }
-  
+
   performLogout() {
     const response = fetch('/auth/perform_logout');
     response.then(response => {
@@ -18,11 +18,11 @@ class LoginUserMenu extends React.Component {
       window.location = '/';
     });
   }
-  
+
   checkAuthState() {
     if (this.props.state.authState === true) return [
       <li className="nav-item">
-        <Link to="/" className="nav-link">
+        <Link to="/profile" className="nav-link">
           Profile
         </Link>
       </li>,
@@ -46,28 +46,28 @@ class LoginUserMenu extends React.Component {
         </div>
       </li>
     ];
-    
+
     else if (this.props.state.authState === null) return <Loader />;
-    
+
     return (
       <a href={'javascript:void(0)'} onClick={this.performLogin}>
         <img src={'img/twitter.svg'} alt=""/> Login with Twitter
       </a>
     );
   }
-  
+
   performLogin() {
     window.location = this.props.state.twitterLoginUrl;
   }
-  
+
   render() {
     return <div className="collapse navbar-collapse show" id="navbarSupportedContent">
       <ul className="navbar-nav mr-auto">
         <li className="nav-link">
-        
+
         </li>
       </ul>
-      
+
       <ul className="navbar-nav ml-auto">
         {this.checkAuthState()}
       </ul>
