@@ -51,17 +51,19 @@ export default class Router extends React.Component {
   }
 
   render() {
-    return <BrowserRouter>
-      <Root state={this.state} setState={this.setState}>
-        {this.state.authState ? <div className="onAuthSuccess">
-          <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
-          <Route exact path={'/profile'} component={() => <ProfilePage state={this.state} setState={this.setState.bind(this)} />} />
-        </div> :
-        <div className="onAuthFail">
-          <Loader />
-        </div> }
-      </Root>
-    </BrowserRouter>
-    ;
+    return (
+      <BrowserRouter>
+        <Root state={this.state} setState={this.setState}>
+          {this.state.authState ? <div className="onAuthSuccess">
+            <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
+            <Route exact path={'/profile'} component={() => <ProfilePage self={true} state={this.state} setState={this.setState.bind(this)} />} />
+          </div> :
+          <div>
+            <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
+            <Route exact path={'/:anything'} initial component={() => <div className="onAuthFail"><Loader /></div>} />
+          </div> }
+        </Root>
+      </BrowserRouter>
+    );
   }
 }

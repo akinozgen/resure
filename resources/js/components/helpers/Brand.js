@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
-const Brand = () => (<a href="/" title={'Resure - HomePage'} className="navbar-brand">
+const Brand = () => (<Link to="/" title={'Resure - HomePage'} className="navbar-brand">
   <div className="logo"/>
-</a>);
+</Link>);
 
 export default Brand;
