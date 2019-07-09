@@ -1,8 +1,23 @@
 import React from 'react';
+import getLatestUsers from "../api/getLatestUsers";
+import {Link} from "react-router-dom";
 
 export default class WelcomePage extends React.Component {
   constructor(props) {
     super(props);
+    
+    this.state = {users: []};
+    
+    this.getLatestUsers = this.getLatestUsers.bind(this);
+  }
+  
+  componentDidMount() {
+    this.getLatestUsers();
+  }
+  
+  async getLatestUsers() {
+    const users = await getLatestUsers();
+    Array.isArray(users.data) ? this.setState({users: users.data}) : null;
   }
   
   render() {
@@ -63,8 +78,24 @@ export default class WelcomePage extends React.Component {
           
           <div className="links">
             <p className="main-paragraph">Ask to a stranger as anonymously, get questions from anonymous anser them.</p>
+            <div className="mt-5">
+              {this.state.users.map(user => {
+                console.log(user);
+                return <span
+                  data-toggle={'tooltip'}
+                  title={user.name}>
+                  <Link
+                    to={`@${user.username}`}
+                    className={'user-block mr-2'}>
+                  <img src={user.pp_url} width="70" height="70" className="rounded-circle img-thumbnail"/>
+                </Link>
+                </span>;
+              })}
+            </div>
           </div>
-          <div className="video"><video src="/bg.mp4" autoPlay={true} loop={true} controls={false} /></div>
+          <div className="video">
+            <video src="/bg.mp4" autoPlay={true} loop={true} controls={false}/>
+          </div>
         </div>
       </div>
     );

@@ -50,16 +50,7 @@ class ProfilePage extends Component {
                     </div>
                     <div className="row">
                         <div className="col-md-4">
-                            <div className="profile-work">
-                                <a
-                                    target="_blank"
-                                    href={`https://twitter.com/${
-                                        this.props.state.user.username
-                                    }`}
-                                >
-                                    @{this.props.state.user.username} on Twitter
-                                </a>
-                            </div>
+                        
                         </div>
                         <div className="col-md-8">
                             <ul
@@ -146,7 +137,12 @@ class ProfilePage extends Component {
                                     role="tabpanel"
                                     aria-labelledby="profile-tab"
                                 >
-                                    <QuestionsList data={this.state.questions} pp_url={this.props.state.user.pp_url} />
+                                    {this.props.self ?
+                                      <QuestionsList
+                                        user_name={this.props.state.user.name}
+                                        self={true}
+                                        data={this.state.questions}
+                                        pp_url={this.props.state.user.pp_url} /> : null}
                                 </div>
                             </div>
                         </div>

@@ -6,6 +6,7 @@ import WelcomePage from "../pages/Welcome";
 import LoginPage from "../pages/Login";
 import ProfilePage from '../pages/Profile';
 import { Loader } from './helpers/Loader';
+import UserProfile from "../pages/UserProfile";
 
 export default class Router extends React.Component {
   constructor(props) {
@@ -57,6 +58,7 @@ export default class Router extends React.Component {
           {this.state.authState ? <div className="onAuthSuccess">
             <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
             <Route exact path={'/profile'} component={() => <ProfilePage self={true} state={this.state} setState={this.setState.bind(this)} />} />
+            <Route exact path={'/@:username'} component={router => <UserProfile username={router.match.params.username} self={false} />} />
           </div> :
           <div>
             <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
