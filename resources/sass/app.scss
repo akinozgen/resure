@@ -39,3 +39,14 @@
     opacity: 1;
   }
 }
+
+.question-block {
+  .question-inner {
+    cursor: pointer;
+  }
+
+  .question-title {
+    font-weight: 600;
+    color: $navbarBackgroundColor;
+  }
+}

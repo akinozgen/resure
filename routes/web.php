@@ -38,3 +38,9 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/perform_logout', 'AuthController@perform_logout');
     
 });
+
+Route::group(['prefix' => 'api'], function () {
+    
+    Route::get('get_questions/{id}/{selects?}', 'QuestionsController@get_questions');
+    
+});

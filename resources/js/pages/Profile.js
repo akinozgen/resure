@@ -1,12 +1,33 @@
 import React, { Component } from "react";
 import Avatar from "../components/profile/Avatar";
 import ProfileNameHolder from "../components/profile/ProfileNameHolder";
+import getQuestions from "../api/getQuestions";
+import QuestionsList from "../components/QuestionsList";
 
 class ProfilePage extends Component {
     constructor(props) {
         super(props);
+        
+        this.state = {
+            questions: []
+        };
+        
+        this.getQuestions = this.getQuestions.bind(this);
     }
-
+    
+    componentDidMount() {
+        this.getQuestions();
+    }
+    
+    async getQuestions() {
+        const questions = await getQuestions();
+        Array.isArray(questions.data) ? this.setState({ questions: questions.data }) : null;
+    }
+    
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        console.log(nextState);
+    }
+    
     render() {
         return (
             <div className="container emp-profile">
@@ -125,7 +146,7 @@ class ProfilePage extends Component {
                                     role="tabpanel"
                                     aria-labelledby="profile-tab"
                                 >
-                                    <div className="row"></div>
+                                    <QuestionsList data={this.state.questions} pp_url={this.props.state.user.pp_url} />
                                 </div>
                             </div>
                         </div>
