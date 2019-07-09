@@ -11,5 +11,8 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.config.hmrOptions.host = 'resure.space';
+mix.notifications.onSuccess = false;
+
 mix.react('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');

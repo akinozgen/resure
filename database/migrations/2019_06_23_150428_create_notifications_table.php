@@ -17,7 +17,7 @@ class CreateNotificationsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('to_user_id');
             $table->integer('from_user_id');
-            $table->enum('type', ['question', 'answer']);
+            $table->string('type', 64);
             $table->integer('related_to_id');
             $table->softDeletes();
             $table->timestamps();
