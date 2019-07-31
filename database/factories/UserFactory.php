@@ -51,8 +51,15 @@ $factory->define(\App\Question::class, function (Faker $faker) {
 
 $factory->define(\App\Answer::class, function (Faker $faker) {
     
-    $users = User::query()->select('id')->get()->toArray();
-    $questions = \App\Question::query()->select('id')->get()->toArray();
+    $users = User::query()->select('id')
+        ->get()
+        ->toArray();
+    
+    $questions = \App\Question::query()
+        ->select('questions.id')
+        ->join('answers', 'questions.id', '=', 'answers.question_id', 'left outer')
+        ->get()
+        ->toArray();
     
     return [
         'answer' => $faker->text(rand(20, 50)),

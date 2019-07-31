@@ -139,6 +139,7 @@ class ProfilePage extends Component {
                                 >
                                     {this.props.self ?
                                       <QuestionsList
+                                        get_questions={this.getQuestions}
                                         user_name={this.props.state.user.name}
                                         self={true}
                                         data={this.state.questions}

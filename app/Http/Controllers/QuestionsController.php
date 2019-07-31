@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Answer;
 use App\Question;
 use App\User;
-use GuzzleHttp\Psr7\Response;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class QuestionsController extends Controller
 {
-    public function get_questions($id = null, $selects = 'content-questions.id')
+    public function get_questions($id = null, $selects = 'content-questions.id-questions.created_at')
     {
         if (!$id OR $id == "null") $id = Auth::user()->id;
-        if (!$selects OR $selects == "null") $selects = 'content-questions.id';
+        if (!$selects OR $selects == "null") $selects = 'content-questions.id-questions.created_at';
         
         $selects = htmlspecialchars(strip_tags(($selects)));
 
@@ -21,9 +23,14 @@ class QuestionsController extends Controller
             ->select(explode('-', $selects))
             ->selectRaw('answers.answer')
             ->join('answers', 'answers.question_id', '=', 'questions.id', 'left')
-            ->orderBy('questions.id', 'desc')
+            ->orderBy('questions.created_at', 'desc')
             ->where('to_user_id', $id)
-            ->get();
+            ->groupBy('questions.id')
+            ->get()
+            ->map(function (Question $question) {
+                $question->asked_at = Carbon::parse($question->created_at)->diffForHumans(Carbon::now());
+                return $question;
+            });
 
         return $questions->toJson();
     }
@@ -66,5 +73,32 @@ class QuestionsController extends Controller
             ->get();
         
         return $users;
+    }
+    
+    public function send_answer()
+    {
+        $question_id = request('id');
+        $answer_text = request('answer');
+        
+        $question = Question::query()->where('id', $question_id)->get();
+        
+        if ($question->count() == 0) return new Response(['status' => 'error', 'message' => 'Question not found!'], 404);
+        $question = $question->first();
+        
+        if ($question->to_user_id != auth()->user()->id) return new Response(['status' => 'error', 'message' => 'This question doesn\'t belong to you >:('], 503);
+        
+        $answer = new Answer([
+            'answer' => $answer_text,
+            'question_id' => $question_id
+        ]);
+        
+        $save = $answer->saveOrFail();
+        return new Response(
+            [
+                'status' => $save ? 'success' : 'error',
+                'message' => $save ? 'Your answer has been saved.' : 'We couldn\'t manage to save your answer. Try again later.'
+            ],
+            $save ? 200 : 500
+        );
     }
 }

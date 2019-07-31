@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
+/**'to_user_id'
  * @property integer $id
  * @property string $content
  * @property int $to_user_id
@@ -19,7 +19,7 @@ class Question extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';

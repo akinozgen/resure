@@ -25,6 +25,7 @@
         "sass-loader": "^7.1.0"
     },
     "dependencies": {
+        "antd": "^3.20.6",
         "react-router-dom": "^5.0.1",
         "react-twitter-auth": "^0.0.13"
     }
