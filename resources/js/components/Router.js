@@ -7,6 +7,7 @@ import LoginPage from "../pages/Login";
 import ProfilePage from '../pages/Profile';
 import { Loader } from './helpers/Loader';
 import UserProfile from "../pages/UserProfile";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export default class Router extends React.Component {
   constructor(props) {
@@ -62,7 +63,11 @@ export default class Router extends React.Component {
           </div> :
           <div>
             <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
-            <Route exact path={'/:anything'} initial component={() => <div className="onAuthFail"><Loader /></div>} />
+            <Route exact path={'/:username'} component={router => {
+              if (!router.match.params.username.includes('@')) return <NotFoundPage router={router} />;
+              
+              return <UserProfile username={router.match.params.username.replace('@', '')} self={false} />;
+            }} />
           </div> }
         </Root>
       </BrowserRouter>

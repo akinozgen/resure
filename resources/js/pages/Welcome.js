@@ -1,6 +1,8 @@
 import React from 'react';
 import getLatestUsers from "../api/getLatestUsers";
 import {Link} from "react-router-dom";
+import {Tooltip} from "antd";
+import Avatar from "antd/lib/avatar";
 
 export default class WelcomePage extends React.Component {
   constructor(props) {
@@ -23,7 +25,7 @@ export default class WelcomePage extends React.Component {
   render() {
     return (
       <div>
-        <style jsx>{`
+        <style jsx={'jsx'}>{`
           body {
               background-color: #000;
               color: #fff;
@@ -80,16 +82,15 @@ export default class WelcomePage extends React.Component {
             <p className="main-paragraph">Ask to a stranger as anonymously, get questions from anonymous anser them.</p>
             <div className="mt-5">
               {this.state.users.map(user => {
-                console.log(user);
-                return <span
-                  data-toggle={'tooltip'}
-                  title={user.name}>
-                  <Link
-                    to={`@${user.username}`}
-                    className={'user-block mr-2'}>
-                  <img src={user.pp_url} width="70" height="70" className="rounded-circle img-thumbnail"/>
-                </Link>
-                </span>;
+                return (
+                  <Tooltip title={user.name}>
+                    <Link
+                      to={`@${user.username}`}
+                      className={'user-block mr-2'}>
+                      <Avatar src={user.pp_url} size={70}>{user.username}</Avatar>
+                    </Link>
+                  </Tooltip>
+                );
               })}
             </div>
           </div>

@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Loader} from "./Loader";
+import {Menu} from "antd";
+import Dropdown from "antd/lib/dropdown";
 
 class LoginUserMenu extends React.Component {
   constructor(props) {
@@ -9,6 +11,7 @@ class LoginUserMenu extends React.Component {
     this.checkAuthState = this.checkAuthState.bind(this);
     this.performLogout = this.performLogout.bind(this);
     this.performLogin = this.performLogin.bind(this);
+    LoginUserMenu.getLoggedInUserMenu = LoginUserMenu.getLoggedInUserMenu.bind(this);
   }
 
   performLogout() {
@@ -18,34 +21,40 @@ class LoginUserMenu extends React.Component {
       window.location = '/';
     });
   }
-
-  checkAuthState() {
-    if (this.props.state.authState === true) return [
-      <li className="nav-item">
-        <Link to="/profile" className="nav-link">
-          Profile
-        </Link>
-      </li>,
-      <li className="nav-item dropdown">
-        <Link id="navbarDropdown"
-              className="nav-link dropdown-toggle"
-              to="/"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false">
-          {this.props.state.user.name} <span className="caret"></span>
-        </Link>
-        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+  
+  static getLoggedInUserMenu() {
+    return (
+      <Menu>
+        <Menu.Item key="0">
           <Link className="dropdown-item" to="/">
             Settings
           </Link>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <Link to="/profile" className="nav-link">
+            Profile
+          </Link>
+        </Menu.Item>
+        <Menu.Divider/>
+        <Menu.Item key="3">
           <Link className="dropdown-item" to="/" onClick={this.performLogout}>
             Logout
           </Link>
-        </div>
+        </Menu.Item>
+      </Menu>
+    );
+  }
+
+  checkAuthState() {
+    if (this.props.state.authState === true) return (
+      <li className="nav-item dropdown">
+        <Dropdown overlay={LoginUserMenu.getLoggedInUserMenu} trigger={['click']}>
+          <a id="navbarDropdown" className="ant-dropdown-link nav-link dropdown-toggle" role="button" href="#">
+            {this.props.state.user.name} <span className="caret"/>
+          </a>
+        </Dropdown>
       </li>
-    ];
+    );
 
     else if (this.props.state.authState === null) return <Loader />;
 
