@@ -47,7 +47,7 @@ class LoginUserMenu extends React.Component {
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key="4">
-          <Link className="nav-link" to="/" onClick={this.performLogout}>
+          <Link className="nav-link" to="/" onClick={LoginUserMenu.performLogout}>
             Logout
           </Link>
         </Menu.Item>

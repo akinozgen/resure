@@ -20,6 +20,7 @@ import Comment from "antd/lib/comment";
 import Skeleton from "antd/lib/skeleton";
 import Tooltip from "antd/lib/tooltip";
 import Switch from "antd/lib/switch";
+import sendAnswer from "../api/sendAnswer";
 
 const {Content, Footer} = Layout;
 
@@ -36,15 +37,24 @@ class UserProfilePage extends Component {
       questionContent: '',
       questionContentValidationStatus: true,
       questionContentHelpText: '',
+      answerModalVisibility: false,
+      answerModalLoading: false,
+      answerContent: '',
+      answerContentValidationStatus: true,
+      answerContentHelpText: '',
       user: this.props.self === false ? false : this.props.state.user,
       questions: [],
       newOnly: false,
-      questionsLoading: false
+      questionsLoading: false,
+      selectedQuestion: null
     };
     
     this.toggleQuestionModal = this.toggleQuestionModal.bind(this);
+    this.toggleAnswerModal = this.toggleAnswerModal.bind(this);
     this.sendQuestion = this.sendQuestion.bind(this);
+    this.sendAnswer = this.sendAnswer.bind(this);
     this.handleQuestionContentChange = this.handleQuestionContentChange.bind(this);
+    this.handleAnswerContentChange = this.handleAnswerContentChange.bind(this);
     this.getUser = this.getUser.bind(this);
     this.getProfileActionsDependentToSelf = this.getProfileActionsDependentToSelf.bind(this);
     this.handleNewOnly = this.handleNewOnly.bind(this);
@@ -53,7 +63,7 @@ class UserProfilePage extends Component {
   }
   
   componentDidMount() {
-    this.getQuestions({ newOnly: this.state.newOnly});
+    this.getQuestions({newOnly: this.state.newOnly});
   }
   
   async getUser() {
@@ -72,10 +82,27 @@ class UserProfilePage extends Component {
     });
   }
   
+  handleAnswerContentChange(_) {
+    const isShort = this.isQuestionContentShort(_.target.value);
+    const isLong = this.isQuestionContentLong(_.target.value);
+    this.setState({
+      answerContent: _.target.value,
+      answerContentHelpText: UserProfilePage.prepareAnswerContentHelpText(isShort, isLong, _.target.value),
+      answerContentValidationStatus: UserProfilePage.prepareQuestionContentStatus(isShort, isLong, _.target.value)
+    });
+  }
+  
   static prepareQuestionContentHelpText(isShort, isLong, content) {
     if (content.length === 0) return 'Question can\'t be empty.';
     if (isShort) return 'Your question is too short.';
     if (isLong) return 'Your qusetion is too long.';
+    return '';
+  }
+  
+  static prepareAnswerContentHelpText(isShort, isLong, content) {
+    if (content.length === 0) return 'Answer can\'t be empty.';
+    if (isShort) return 'Your answer is too short.';
+    if (isLong) return 'Your answer is too long.';
     return '';
   }
   
@@ -102,6 +129,15 @@ class UserProfilePage extends Component {
     });
   }
   
+  toggleAnswerModal(id = null) {
+    this.setState({
+      answerModalVisibility: !this.state.answerModalVisibility,
+      answerModalLoading: this.state.answerModalVisibility ? true : false,
+      answerContent: '',
+      selectedQuestion: typeof id === 'number' ? id : 0
+    });
+  }
+  
   sendQuestion() {
     const content = this.state.questionContent;
     const isShort = this.isQuestionContentShort(content);
@@ -124,51 +160,88 @@ class UserProfilePage extends Component {
       });
   }
   
-  getQuestions({ newOnly }) {
-    this.setState({ questionsLoading: true });
+  sendAnswer() {
+    const content = this.state.answerContent;
+    const isShort = this.isQuestionContentShort(content);
+    const isLong = this.isQuestionContentLong(content);
+    if (UserProfilePage.prepareQuestionContentStatus(isShort, isLong, content) !== 'success') return;
     
-    getQuestions(this.props.username, null, newOnly)
+    this.setState({answerModalLoading: !this.state.answerModalLoading});
+    
+    sendAnswer({id: this.state.selectedQuestion, answer: content})
       .then(response => {
-        if (response.data.status !== 'success') return axiosResponseErrorModal({ response });
-        this.setState({ questions: response.data.data });
+        Modal.success({
+          title: 'Success',
+          content: response.data.message
+        });
+        
+        this.appendAnswer();
       })
       .catch(axiosResponseErrorModal)
       .finally(() => {
-        this.setState({ questionsLoading: false });
+        this.setState({answerModalLoading: false});
+        this.toggleAnswerModal(0);
+      });
+  }
+  
+  appendAnswer() {
+    const question = this.state.questions.filter(_ => _.id === this.state.selectedQuestion)[0];
+    const questionIndex = this.state.questions.map(_ => _.id).indexOf(question.id);
+    const questions = this.state.questions;
+    
+    question.answer = this.state.answerContent;
+    question.answered_at = 'Just now';
+    questions[questionIndex] = question;
+    
+    this.setState({ questions });
+  }
+  
+  getQuestions({newOnly}) {
+    this.setState({questionsLoading: true});
+    
+    getQuestions(this.props.username, null, newOnly)
+      .then(response => {
+        if (response.data.status !== 'success') return axiosResponseErrorModal({response});
+        this.setState({questions: response.data.data});
+      })
+      .catch(axiosResponseErrorModal)
+      .finally(() => {
+        this.setState({questionsLoading: false});
       });
   }
   
   getQuestionTemplate(question) {
-    return <Card bodyStyle={{ padding: 0 }} className="pl-4 pr-4 pt-2 pb-0 mb-2">
-      <Comment
-        actions={[<span key="comment-nested-reply-to">{question.asked_at}</span>]}
-        author={<a>Anonymous <small className="badge badge-light ml-1" >asked</small></a>}
-        avatar={
-          <Avatar src="/img/anon-avatar.svg" />
-        }
-        content={
-          <p>
-            {question.content}
-          </p>
-        }
-      >
-        {question.answer ? <Comment
-          actions={[<span key="comment-nested-reply-to">{question.answered_at}</span>]}
-          author={<a>{this.state.user.name} <small className={'badge badge-success ml-1'}>answered</small></a>}
+    return <Card bodyStyle={{padding: 0}} className="pl-4 pr-4 pt-2 pb-0 mb-2">
+      {this.state.questionsLoading ? <Skeleton key={_} avatar={true} title={true} paragraph={true} active={true} loading={true}/> :
+        <Comment
+          actions={[<span key="comment-nested-reply-to">{question.asked_at}</span>]}
+          author={<a>Anonymous <small className="badge badge-light ml-1">asked</small></a>}
           avatar={
-            <Avatar src={this.state.user.pp_url} />
+            <Avatar src="/img/anon-avatar.svg"/>
           }
-          content={question.answer}
+          content={
+            <p>
+              {question.content}
+            </p>
+          }
         >
-        </Comment> : null}
-      </Comment>
+          {question.answer ? <Comment
+            actions={[<span key="comment-nested-reply-to">{question.answered_at}</span>]}
+            author={<a>{this.state.user.name} <small className={'badge badge-success ml-1'}>answered</small></a>}
+            avatar={
+              <Avatar src={this.state.user.pp_url}/>
+            }
+            content={question.answer}
+          >
+          </Comment> : <Button className={'mb-2'} onClick={_ => this.toggleAnswerModal(question.id)} type={'primary'}>Answer</Button>}
+        </Comment>}
     </Card>;
   }
   
   getGhostQuestionTemplate() {
-      return Array.from('loading').map(_ => <Card bodyStyle={{ padding: 0 }} className="pl-4 pr-4 pt-2 pb-0 mb-2">
-        <Skeleton key={_} avatar={true} title={true} paragraph={true} active={true} loading={true} />
-      </Card>);
+    return Array.from('loading').map(_ => <Card bodyStyle={{padding: 0}} className="pl-4 pr-4 pt-2 pb-0 mb-2">
+      <Skeleton key={_} avatar={true} title={true} paragraph={true} active={true} loading={true}/>
+    </Card>);
   }
   
   getProfileActionsDependentToSelf() {
@@ -188,7 +261,7 @@ class UserProfilePage extends Component {
       <Link to={`/@${this.state.user.username}/followers`}>
         <i className="fa fa-user-friends"/>
         {this.state.user.total_followers} Followers
-      </Link> ,
+      </Link>,
       <Link to={`/@${this.state.user.username}/following`}>
         <i className="fa fa-users"/>
         {this.state.user.total_followings} Following
@@ -206,7 +279,7 @@ class UserProfilePage extends Component {
       newOnly
     });
     
-    this.getQuestions({ newOnly });
+    this.getQuestions({newOnly});
   }
   
   render() {
@@ -226,7 +299,7 @@ class UserProfilePage extends Component {
                 description={this.state.user.bio ? this.state.user.bio : '[bio not set]'}
               />
               <Button hidden={this.props.self} type={'danger'} className={'mt-3'} block onClick={this.toggleQuestionModal}>
-                Want to ask a question <Icon type={"question"} />
+                Want to ask a question <Icon type={"question"}/>
               </Button>
             </Card>
           </div>
@@ -245,7 +318,7 @@ class UserProfilePage extends Component {
                       <div className="col-12">
                         <Form layout={'inline'}>
                           <Form.Item label="New Only">
-                            <Switch checked={this.state.newOnly} onClick={this.handleNewOnly} />
+                            <Switch checked={this.state.newOnly} onClick={this.handleNewOnly}/>
                           </Form.Item>
                         </Form>
                       </div>
@@ -262,7 +335,7 @@ class UserProfilePage extends Component {
               this.state.questionsLoading ? this.getGhostQuestionTemplate() : this.state.questions.map(this.getQuestionTemplate.bind(this))
             }</div>
           </div>
-          
+        
         </Content>
         
         <Modal
@@ -285,6 +358,32 @@ class UserProfilePage extends Component {
                 placeholder={'Please be kind to others.'}
                 rows={4}
                 title={'Your question?'}
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
+        
+        <Modal
+          okText={'Send'}
+          cancelText={'Nevermind'}
+          visible={this.state.answerModalVisibility}
+          onOk={this.sendAnswer}
+          confirmLoading={this.state.answerModalLoading}
+          onCancel={this.toggleAnswerModal}
+        >
+          <Form layout="horizontal">
+            <Form.Item
+              label={"Your answer"}
+              validateStatus={this.state.answerContentValidationStatus}
+              help={this.state.answerContentHelpText}>
+              <TextArea
+                minLength={10}
+                maxLength={140}
+                value={this.state.answerContent}
+                onInput={this.handleAnswerContentChange}
+                placeholder={'Please be kind to others.'}
+                rows={4}
+                title={'Your answer...'}
               />
             </Form.Item>
           </Form>
