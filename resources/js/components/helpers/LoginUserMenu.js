@@ -3,13 +3,13 @@ import {Link, Redirect} from 'react-router-dom';
 import {Loader} from "./Loader";
 import {Menu} from "antd";
 import Dropdown from "antd/lib/dropdown";
+import {API_CONFIG} from "../../api/config";
 
 class LoginUserMenu extends React.Component {
   constructor(props) {
     super(props);
 
     this.checkAuthState = this.checkAuthState.bind(this);
-    this.performLogin = this.performLogin.bind(this);
     LoginUserMenu.getLoggedInUserMenu = LoginUserMenu.getLoggedInUserMenu.bind(this);
   }
 
@@ -69,14 +69,14 @@ class LoginUserMenu extends React.Component {
     else if (this.props.state.authState === null) return <Loader />;
 
     return (
-      <a href={'javascript:void(0)'} onClick={this.performLogin}>
+      <a href={'javascript:void(0)'} onClick={LoginUserMenu.performLogin}>
         <img src={'img/twitter.svg'} alt=""/> Login with Twitter
       </a>
     );
   }
 
-  performLogin() {
-    window.location = this.props.state.twitterLoginUrl;
+  static performLogin() {
+    window.location = API_CONFIG.loginUrl;
   }
 
   render() {

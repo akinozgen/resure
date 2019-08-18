@@ -3,12 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="5809e87a-a093-40b7-a205-7e5100a30757" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/api/sendAnswer.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/api/sendAnswer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/api/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/api/config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/helpers/LoginUserMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/helpers/LoginUserMenu.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/pages/UserProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/UserProfilePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/pages/Welcome.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Welcome.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/sass/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/app.scss" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

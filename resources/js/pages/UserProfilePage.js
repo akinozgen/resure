@@ -122,6 +122,14 @@ class UserProfilePage extends Component {
   }
   
   toggleQuestionModal() {
+    if (!this.props.state.authState) return Modal.warning({
+      content: 'You need to login in order to ask a question.',
+      okText: 'Login with twitter',
+      cancelText: 'Cancel',
+      onOk: () => LoginUserMenu.performLogin(),
+      title: 'Warning'
+    });
+    
     this.setState({
       questionModalVisibility: !this.state.questionModalVisibility,
       questionModalLoading: this.state.questionModalVisibility ? true : false,
