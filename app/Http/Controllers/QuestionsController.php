@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
+use App\Enums\Responses;
 use App\Question;
 use App\User;
 use Carbon\Carbon;
@@ -14,6 +15,11 @@ class QuestionsController extends Controller
 {
     public function get_questions($id = null, $selects = 'content-questions.id-questions.created_at')
     {
+        if (!auth()->check()) return new Response([
+            'status' => Responses::ERROR,
+            'message' => Responses::NOT_LOGGED_IN_FOR_QUESTIONS
+        ], Responses::STATUS_ERR_AUTH);
+        
         if (!$id OR $id == "null") $id = Auth::user()->id;
         if (!$selects OR $selects == "null") $selects = 'content-questions.id-questions.created_at';
         
@@ -32,7 +38,10 @@ class QuestionsController extends Controller
                 return $question;
             });
 
-        return $questions->toJson();
+        return new Response([
+            'status' => Responses::SUCCESS,
+            'data' => $questions->toArray()
+        ], Responses::STATUS_OK);
     }
     
     public function get_user($username = null)
@@ -82,23 +91,54 @@ class QuestionsController extends Controller
         
         $question = Question::query()->where('id', $question_id)->get();
         
-        if ($question->count() == 0) return new Response(['status' => 'error', 'message' => 'Question not found!'], 404);
+        if ($question->count() == 0) return new Response(['status' => Responses::ERROR, 'message' => Responses::QUESTION_NOT_FOUND], Responses::STATUS_NOT_FOUND);
         $question = $question->first();
         
-        if ($question->to_user_id != auth()->user()->id) return new Response(['status' => 'error', 'message' => 'This question doesn\'t belong to you >:('], 503);
+        if ($question->to_user_id != auth()->user()->id) return new Response(['status' => Responses::ERROR, 'message' => Responses::NOT_USERS_QUESTION], Responses::STATUS_ERR_AUTH);
         
         $answer = new Answer([
             'answer' => $answer_text,
             'question_id' => $question_id
         ]);
         
-        $save = $answer->saveOrFail();
+        $save = $answer->save();
         return new Response(
             [
-                'status' => $save ? 'success' : 'error',
-                'message' => $save ? 'Your answer has been saved.' : 'We couldn\'t manage to save your answer. Try again later.'
+                'status' => $save ? Responses::SUCCESS : Responses::ERROR,
+                'message' => $save ? Responses::SAVED : Responses::NOT_SAVED
             ],
-            $save ? 200 : 500
+            $save ? Responses::STATUS_OK : Responses::STATUS_ERR
         );
+    }
+    
+    public function send_question()
+    {
+        $to_user = User::query()->where('username', request('to_user_id'))->first();
+        if ( ! ($to_user instanceof User) ) return new Response([
+            'status' => Responses::ERROR,
+            'message' => Responses::USER_NOT_FOUND
+        ], Responses::STATUS_NOT_FOUND);
+        
+        $question_content = request('question_content');
+        $to_user_id = $to_user->id;
+        $from_user_id = auth()->user()->id;
+     
+        if (auth()->user()->id == $to_user_id) return new Response([
+            'status' => Responses::ERROR,
+            'message' => Responses::CANT_ASK_YOURSELF
+        ], Responses::STATUS_ERR_AUTH);
+        
+        $question = new Question([
+            'content' => $question_content,
+            'to_user_id' => $to_user_id,
+            'from_user_id' => $from_user_id
+        ]);
+        
+        $save = $question->save();
+        
+        return new Response([
+            'status' => $save ? Responses::SUCCESS : Responses::ERROR,
+            'message' => $save ? Responses::QUESTION_SENT : Responses::QUESTION_NOT_SEND
+        ], $save ? Responses::STATUS_OK : Responses::STATUS_ERR);
     }
 }

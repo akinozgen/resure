@@ -31,30 +31,30 @@ class SocialAuthController extends Controller
             ->where('provider_id', $providerUser->getId())
             ->first();
         
-        $user->fill([
-            'name' => $providerUser->getName(),
-            'provider_id' => $providerUser->getId(),
-            'provider' => $providerName,
-            'twitter_token' => $providerUser->token,
-            'pp_url' => $providerUser->avatar_original,
-            'banner_url' => $providerUser->user['profile_banner_url'],
-            'bio' => $providerUser->user['description'],
-            'twitter_data' => json_encode($providerUser->user, JSON_PRETTY_PRINT)
-        ])->save();
-
         if (!$user) {
             $user = User::create([
-                'name' => $providerUser->getName(),
-                'username' => $providerUser->getNickname(),
-                'email' => $providerUser->getEmail(),
-                'provider_id' => $providerUser->getId(),
+                'name' => @$providerUser->getName(),
+                'username' => @$providerUser->getNickname(),
+                'email' => @$providerUser->getEmail(),
+                'provider_id' => @$providerUser->getId(),
                 'provider' => $providerName,
-                'twitter_token' => $providerUser->token,
-                'pp_url' => $providerUser->avatar_original,
-                'banner_url' => $providerUser->user['profile_banner_url'],
-                'bio' => $providerUser->user['description'],
-                'twitter_data' => json_encode($providerUser->user, JSON_PRETTY_PRINT)
+                'twitter_token' => @$providerUser->token,
+                'pp_url' => @$providerUser->avatar_original,
+                'banner_url' => @$providerUser->user['profile_banner_url'],
+                'bio' => @$providerUser->user['description'],
+                'twitter_data' => json_encode(@$providerUser->user, JSON_PRETTY_PRINT)
             ]);
+        } else {
+            $user->fill([
+                'name' => @$providerUser->getName(),
+                'provider_id' => @$providerUser->getId(),
+                'provider' => $providerName,
+                'twitter_token' => @$providerUser->token,
+                'pp_url' => @$providerUser->avatar_original,
+                'banner_url' => @$providerUser->user['profile_banner_url'],
+                'bio' => @$providerUser->user['description'],
+                'twitter_data' => json_encode($providerUser->user, JSON_PRETTY_PRINT)
+            ])->save();
         }
         
         return $user;

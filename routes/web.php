@@ -45,5 +45,6 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('get_user/{username}', 'QuestionsController@get_user');
     Route::get('get_latest_users', 'QuestionsController@get_latest_users');
     Route::post('send_answer', 'QuestionsController@send_answer');
+    Route::post('send_question', 'QuestionsController@send_question');
     
 });

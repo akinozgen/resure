@@ -3,11 +3,8 @@ import Root from "./Root";
 import {BrowserRouter, Route, Link} from 'react-router-dom';
 
 import WelcomePage from "../pages/Welcome";
-import LoginPage from "../pages/Login";
-import ProfilePage from '../pages/Profile';
-import { Loader } from './helpers/Loader';
-import UserProfile from "../pages/UserProfile";
 import NotFoundPage from "../pages/NotFoundPage";
+import UserProfilePage from "../pages/UserProfilePage";
 
 export default class Router extends React.Component {
   constructor(props) {
@@ -58,15 +55,15 @@ export default class Router extends React.Component {
         <Root state={this.state} setState={this.setState}>
           {this.state.authState ? <div className="onAuthSuccess">
             <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
-            <Route exact path={'/profile'} component={() => <ProfilePage self={true} state={this.state} setState={this.setState.bind(this)} />} />
-            <Route exact path={'/@:username'} component={router => <UserProfile username={router.match.params.username} self={false} />} />
+            <Route exact path={'/profile'} component={() => <UserProfilePage self={true} state={this.state} setState={this.setState.bind(this)} />} />
+            <Route exact path={'/@:username'} component={router => <UserProfilePage state={this.state} username={router.match.params.username} self={false} />} />
           </div> :
           <div>
             <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
             <Route exact path={'/:username'} component={router => {
               if (!router.match.params.username.includes('@')) return <NotFoundPage router={router} />;
               
-              return <UserProfile username={router.match.params.username.replace('@', '')} self={false} />;
+              return <UserProfilePage username={router.match.params.username.replace('@', '')} state={this.state} self={false} />;
             }} />
           </div> }
         </Root>

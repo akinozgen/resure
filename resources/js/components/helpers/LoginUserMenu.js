@@ -9,12 +9,11 @@ class LoginUserMenu extends React.Component {
     super(props);
 
     this.checkAuthState = this.checkAuthState.bind(this);
-    this.performLogout = this.performLogout.bind(this);
     this.performLogin = this.performLogin.bind(this);
     LoginUserMenu.getLoggedInUserMenu = LoginUserMenu.getLoggedInUserMenu.bind(this);
   }
 
-  performLogout() {
+  static performLogout() {
     const response = fetch('/auth/perform_logout');
     response.then(response => {
       if (response.statusText !== 'OK') return;
@@ -26,7 +25,7 @@ class LoginUserMenu extends React.Component {
     return (
       <Menu>
         <Menu.Item key="0">
-          <Link className="dropdown-item" to="/">
+          <Link className="nav-link" to="/">
             Settings
           </Link>
         </Menu.Item>
@@ -37,7 +36,7 @@ class LoginUserMenu extends React.Component {
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key="3">
-          <Link className="dropdown-item" to="/" onClick={this.performLogout}>
+          <Link className="nav-link" to="/" onClick={this.performLogout}>
             Logout
           </Link>
         </Menu.Item>
