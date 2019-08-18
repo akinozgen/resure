@@ -23,18 +23,24 @@ class QuestionsController extends Controller
         if (!$id OR $id == "null") $id = Auth::user()->id;
         if (!$selects OR $selects == "null") $selects = 'content-questions.id-questions.created_at';
         
+        if (intval($id) == 0) {
+            $id = User::query()->where('username', $id)->first()->id;
+            $answeredOnly = true;
+        }
+        
         $selects = htmlspecialchars(strip_tags(($selects)));
 
         $questions = Question::query()
             ->select(explode('-', $selects))
-            ->selectRaw('answers.answer')
-            ->join('answers', 'answers.question_id', '=', 'questions.id', 'left')
+            ->selectRaw('answers.answer, answers.created_at as answered_at')
+            ->join('answers', 'answers.question_id', '=', 'questions.id', isset($answeredOnly) ? 'inner' : 'left')
             ->orderBy('questions.created_at', 'desc')
             ->where('to_user_id', $id)
             ->groupBy('questions.id')
             ->get()
             ->map(function (Question $question) {
                 $question->asked_at = Carbon::parse($question->created_at)->diffForHumans(Carbon::now());
+                $question->answered_at = Carbon::parse($question->answered_at)->diffForHumans(Carbon::now());
                 return $question;
             });
 
@@ -54,20 +60,9 @@ class QuestionsController extends Controller
             ->get()
             ->first();
         
-        if (!$user)return new Response(404, [], ['error' => 'User not found.']);
-        
-        $questions = Question::query()
-            ->select('content')
-            ->selectRaw('answers.answer')
-            ->join('answers', 'answers.question_id', '=', 'questions.id', 'inner')
-            ->orderBy('questions.id', 'desc')
-            ->where('questions.to_user_id', $user->id)
-            ->get();
+        if (!$user) return new Response(404, [], ['error' => 'User not found.']);
 
         $user->id = null;
-        $user->questions = $questions;
-        /** @var User $user */
-        
         return collect($user->getAttributes())->filter(function ($x) {
             return $x ? true : false;
         });
