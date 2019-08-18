@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Answer;
 use App\Enums\Responses;
+use App\Follow;
 use App\Question;
 use App\User;
 use Carbon\Carbon;
@@ -29,21 +30,39 @@ class QuestionsController extends Controller
         }
         
         $selects = htmlspecialchars(strip_tags(($selects)));
-
+        
+        $joinType = 'left';
+        
+        if (isset($answeredOnly)) {
+            $joinType = 'inner';
+        } else {
+            $joinType = 'left';
+        }
+        
         $questions = Question::query()
             ->select(explode('-', $selects))
             ->selectRaw('answers.answer, answers.created_at as answered_at')
-            ->join('answers', 'answers.question_id', '=', 'questions.id', isset($answeredOnly) ? 'inner' : 'left')
+            ->join('answers', 'answers.question_id', '=', 'questions.id', $joinType)
             ->orderBy('questions.created_at', 'desc')
             ->where('to_user_id', $id)
-            ->groupBy('questions.id')
+            ->groupBy('questions.id');
+
+        if (request('newOnly') == 'true' && !isset($answeredOnly)) {
+            $questions = $questions->whereNull('answers.id');
+        }
+        
+        $questions = $questions
             ->get()
             ->map(function (Question $question) {
                 $question->asked_at = Carbon::parse($question->created_at)->diffForHumans(Carbon::now());
-                $question->answered_at = Carbon::parse($question->answered_at)->diffForHumans(Carbon::now());
+                
+                if ($question->answer) {
+                    $question->answered_at = Carbon::parse($question->answered_at)->diffForHumans(Carbon::now());
+                }
+                
                 return $question;
             });
-
+        
         return new Response([
             'status' => Responses::SUCCESS,
             'data' => $questions->toArray()
@@ -59,6 +78,30 @@ class QuestionsController extends Controller
             ->where('username', $username)
             ->get()
             ->first();
+        
+        $followers = Follow::query()
+            ->selectRaw('count(id) as total')
+            ->where('following_user_id', $user->id)
+            ->first()
+            ->total;
+        
+        $followings = Follow::query()
+            ->selectRaw('count(id) as total')
+            ->where('follower_user_id', $user->id)
+            ->first()
+            ->total;
+        
+        $answereds = Question::query()
+            ->selectRaw('count(questions.id) as total')
+            ->join('answers', 'answers.question_id', '=', 'questions.id' ,'inner')
+            ->where('questions.to_user_id', $user->id)
+            ->distinct()
+            ->first()
+            ->total;
+        
+        $user->total_followers = $followers;
+        $user->total_followings = $followings;
+        $user->total_answered = $answereds;
         
         if (!$user) return new Response(404, [], ['error' => 'User not found.']);
 

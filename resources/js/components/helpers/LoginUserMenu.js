@@ -35,7 +35,18 @@ class LoginUserMenu extends React.Component {
           </Link>
         </Menu.Item>
         <Menu.Divider/>
+        <Menu.Item key="2">
+          <Link to="/my_followers" className="nav-link">
+            My Followers
+          </Link>
+        </Menu.Item>
         <Menu.Item key="3">
+          <Link to="/following" className="nav-link">
+            Following
+          </Link>
+        </Menu.Item>
+        <Menu.Divider/>
+        <Menu.Item key="4">
           <Link className="nav-link" to="/" onClick={this.performLogout}>
             Logout
           </Link>

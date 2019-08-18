@@ -17,6 +17,9 @@ import LoginUserMenu from "../components/helpers/LoginUserMenu";
 import getQuestions from "../api/getQuestions";
 import axiosResponseErrorModal from "../components/helpers/axiosResponseErrorModal";
 import Comment from "antd/lib/comment";
+import Skeleton from "antd/lib/skeleton";
+import Tooltip from "antd/lib/tooltip";
+import Switch from "antd/lib/switch";
 
 const {Content, Footer} = Layout;
 
@@ -34,7 +37,9 @@ class UserProfilePage extends Component {
       questionContentValidationStatus: true,
       questionContentHelpText: '',
       user: this.props.self === false ? false : this.props.state.user,
-      questions: []
+      questions: [],
+      newOnly: false,
+      questionsLoading: false
     };
     
     this.toggleQuestionModal = this.toggleQuestionModal.bind(this);
@@ -42,12 +47,13 @@ class UserProfilePage extends Component {
     this.handleQuestionContentChange = this.handleQuestionContentChange.bind(this);
     this.getUser = this.getUser.bind(this);
     this.getProfileActionsDependentToSelf = this.getProfileActionsDependentToSelf.bind(this);
+    this.handleNewOnly = this.handleNewOnly.bind(this);
     
     if (this.props.self === false) this.getUser();
   }
   
   componentDidMount() {
-    this.getQuestions();
+    this.getQuestions({ newOnly: this.state.newOnly});
   }
   
   async getUser() {
@@ -118,13 +124,18 @@ class UserProfilePage extends Component {
       });
   }
   
-  getQuestions() {
-    getQuestions(this.props.username)
+  getQuestions({ newOnly }) {
+    this.setState({ questionsLoading: true });
+    
+    getQuestions(this.props.username, null, newOnly)
       .then(response => {
         if (response.data.status !== 'success') return axiosResponseErrorModal({ response });
         this.setState({ questions: response.data.data });
       })
       .catch(axiosResponseErrorModal)
+      .finally(() => {
+        this.setState({ questionsLoading: false });
+      });
   }
   
   getQuestionTemplate(question) {
@@ -154,19 +165,48 @@ class UserProfilePage extends Component {
     </Card>;
   }
   
+  getGhostQuestionTemplate() {
+      return Array.from('loading').map(_ => <Card bodyStyle={{ padding: 0 }} className="pl-4 pr-4 pt-2 pb-0 mb-2">
+        <Skeleton key={_} avatar={true} title={true} paragraph={true} active={true} loading={true} />
+      </Card>);
+  }
+  
   getProfileActionsDependentToSelf() {
     if (this.props.self === true) return [
-      <Link to={'/settings'}><Icon type="setting" key="setting"/></Link> ,
-      <Link to={'/profile_edit'}><Icon type="edit" key="edit"/></Link>,
-      <Icon type="logout" key="ellipsis" onClick={LoginUserMenu.performLogout}/>,
+      <Tooltip key={0} title={'Settings'}>
+        <Link to={'/settings'}><Icon type="setting" key="setting"/></Link>
+      </Tooltip>,
+      <Tooltip key={1} title={'Edit Profile'}>
+        <Link to={'/profile_edit'}><Icon type="edit" key="edit"/></Link>
+      </Tooltip>,
+      <Tooltip key={1} title={'Logout'}>
+        <Icon type="logout" key="ellipsis" onClick={LoginUserMenu.performLogout}/>
+      </Tooltip>,
     ];
     
-    return <div className="content padding">
-      {this.props.self === false ? <Button type="primary" onClick={this.toggleQuestionModal}>
-        Want to ask a question
-        <Icon type={'question'}/>
-      </Button> : null}
-    </div>;
+    return [
+      <Link to={`/@${this.state.user.username}/followers`}>
+        <i className="fa fa-user-friends"/>
+        {this.state.user.total_followers} Followers
+      </Link> ,
+      <Link to={`/@${this.state.user.username}/following`}>
+        <i className="fa fa-users"/>
+        {this.state.user.total_followings} Following
+      </Link>,
+      <a>
+        <i className="fa fa-star"/>
+        {this.state.user.total_answered} Answers
+      </a>,
+    ];
+  }
+  
+  handleNewOnly() {
+    const newOnly = !this.state.newOnly;
+    this.setState({
+      newOnly
+    });
+    
+    this.getQuestions({ newOnly });
   }
   
   render() {
@@ -185,6 +225,9 @@ class UserProfilePage extends Component {
                 title={this.state.user.name}
                 description={this.state.user.bio ? this.state.user.bio : '[bio not set]'}
               />
+              <Button hidden={this.props.self} type={'danger'} className={'mt-3'} block onClick={this.toggleQuestionModal}>
+                Want to ask a question <Icon type={"question"} />
+              </Button>
             </Card>
           </div>
           <div className="col-md-8 col-sm-12">
@@ -194,14 +237,30 @@ class UserProfilePage extends Component {
                 title={this.state.user.name}
               >
                 <div className="wrap">
-                  <div className="extraContent">
-                    {this.props.self === false ? `Answered questions by ${this.state.user.name}` : 'Questions sent to you'}
-                  </div>
+                  {!this.state.self ?
+                    <div className="extraContent row">
+                      <div className="col-12">
+                        <p>Questions sent to you</p>
+                      </div>
+                      <div className="col-12">
+                        <Form layout={'inline'}>
+                          <Form.Item label="New Only">
+                            <Switch checked={this.state.newOnly} onClick={this.handleNewOnly} />
+                          </Form.Item>
+                        </Form>
+                      </div>
+                    </div> :
+                    <div className="extraContent row">
+                      <div className="col-xs-12"><p>Answered questions by {this.state.user.name}</p></div>
+                    </div>
+                  }
                 </div>
               </PageHeader>
             </Card>
             
-            <div className="questions_list">{this.state.questions.map(this.getQuestionTemplate.bind(this))}</div>
+            <div className="questions_list">{
+              this.state.questionsLoading ? this.getGhostQuestionTemplate() : this.state.questions.map(this.getQuestionTemplate.bind(this))
+            }</div>
           </div>
           
         </Content>
