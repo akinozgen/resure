@@ -119,7 +119,7 @@ export default class WelcomePage extends React.Component {
             </div>
           </div>
           <div className="video">
-            <video src="/bg.mp4" autoPlay={true} loop={true} controls={false}/>
+            <video src="/bg.webm" autoPlay={true} loop={true} controls={false}/>
           </div>
         </div>
       </div>

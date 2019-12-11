@@ -27,6 +27,6 @@ class Question extends Model
     /**
      * @var array
      */
-    protected $fillable = ['content', 'to_user_id', 'from_user_id', 'question_id', 'rating', 'deleted_at', 'created_at', 'updated_at'];
+    protected $fillable = ['content', 'to_user_id', 'from_user_id', 'question_id', 'rating', 'deleted_at', 'created_at', 'updated_at', 'anon'];
 
 }

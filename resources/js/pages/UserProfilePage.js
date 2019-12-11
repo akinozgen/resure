@@ -46,7 +46,8 @@ class UserProfilePage extends Component {
       questions: [],
       newOnly: false,
       questionsLoading: false,
-      selectedQuestion: null
+      selectedQuestion: null,
+      isAnon: true
     };
     
     this.toggleQuestionModal = this.toggleQuestionModal.bind(this);
@@ -154,7 +155,7 @@ class UserProfilePage extends Component {
     
     this.setState({questionModalLoading: !this.state.questionModalLoading});
     
-    sendQuestion({content, to_id: this.state.user.username})
+    sendQuestion({content, to_id: this.state.user.username, isAnon: this.state.isAnon})
       .then(response => {
         Modal.success({
           title: 'Success',
@@ -219,13 +220,20 @@ class UserProfilePage extends Component {
   }
   
   getQuestionTemplate(question) {
+    const username = question.hasOwnProperty('asked_by') ? question.asked_by.username : 'Anonymous';
+    const profile_picture = question.hasOwnProperty('asked_by') ? question.asked_by.profile_picture : '/img/anon-avatar.svg';
+    const href = question.hasOwnProperty('asked_by') ? (window.location.origin+'/@'+question.asked_by.username) : 'javascript:void(0)';
+
     return <Card bodyStyle={{padding: 0}} className="pl-4 pr-4 pt-2 pb-0 mb-2">
       {this.state.questionsLoading ? <Skeleton key={_} avatar={true} title={true} paragraph={true} active={true} loading={true}/> :
         <Comment
           actions={[<span key="comment-nested-reply-to">{question.asked_at}</span>]}
-          author={<a>Anonymous <small className="badge badge-light ml-1">asked</small></a>}
+          author={<a href={href}>{username} <small className="badge badge-light ml-1">asked</small></a>}
           avatar={
-            <Avatar src="/img/anon-avatar.svg"/>
+            <Avatar src={profile_picture} onClick={() => {
+              if (! question.hasOwnProperty('asked_by')) return;
+              window.location = href;
+            }} />
           }
           content={
             <p>
@@ -367,6 +375,9 @@ class UserProfilePage extends Component {
                 rows={4}
                 title={'Your question?'}
               />
+            </Form.Item>
+            <Form.Item label="Anonymous" labelAlign="left">
+              <Switch defaultChecked onChange={_ => this.setState({ isAnon: _ })} />
             </Form.Item>
           </Form>
         </Modal>
