@@ -56,7 +56,10 @@ export default class Router extends React.Component {
           {this.state.authState ? <div className="onAuthSuccess">
             <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
             <Route exact path={'/profile'} component={() => <UserProfilePage self={true} state={this.state} setState={this.setState.bind(this)} />} />
-            <Route exact path={'/@:username'} component={router => <UserProfilePage state={this.state} username={router.match.params.username} self={false} />} />
+            <Route exact path={'/@:username/:other?'} component={router => {
+		if (typeof router.match.params.other != 'undefined') return <h1>{router.match.params.username}s {router.match.params.other}</h1>;
+	    	return <UserProfilePage state={this.state} username={router.match.params.username} self={false} />;
+	    }} /> 
           </div> :
           <div>
             <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />

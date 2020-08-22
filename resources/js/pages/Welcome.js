@@ -111,7 +111,11 @@ export default class WelcomePage extends React.Component {
           </div>
           
           <div className="links">
-            <p className="main-paragraph">Ask to a stranger as anonymously, get questions from anonymous anser them.</p>
+            <p className="main-paragraph">
+	        Ask a stranger as <a href="https://www.dictionary.com/browse/anonymous?s=t" target="_blank">anon(1)</a>,
+	        get questions from <a href="https://www.dictionary.com/browse/anonymous?s=t" target="_blank">anons(1)</a>,
+	        answer them if you wish.
+	    </p>
             <div className="mt-5">
               {
                 this.state.usersLoading ? this.renderGhostUsers() : this.state.users.map(this.renderUserAvatar)
