@@ -8,7 +8,9 @@ export class Loader extends React.Component {
           .loading {
             width: 30px;
             height: 30px;
-            filter: brightness(0) invert(1);
+            display: block;
+            margin: 0 auto;
+            filter: brightness(0);
           }
         `}
       </style>,

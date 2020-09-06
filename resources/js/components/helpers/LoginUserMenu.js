@@ -20,7 +20,7 @@ class LoginUserMenu extends React.Component {
       window.location = '/';
     });
   }
-  
+
   static getLoggedInUserMenu() {
     return (
       <Menu>
@@ -70,7 +70,7 @@ class LoginUserMenu extends React.Component {
 
     return (
       <a href={'javascript:void(0)'} onClick={LoginUserMenu.performLogin}>
-        <img src={'img/twitter.svg'} alt=""/> Login with Twitter
+        <img src={'img/twitter.svg'} alt=""/> <span className="d-sm-none d-md-inline-block">Login with Twitter</span>
       </a>
     );
   }
@@ -80,17 +80,9 @@ class LoginUserMenu extends React.Component {
   }
 
   render() {
-    return <div className="collapse navbar-collapse show" id="navbarSupportedContent">
-      <ul className="navbar-nav mr-auto">
-        <li className="nav-link">
-
-        </li>
-      </ul>
-
-      <ul className="navbar-nav ml-auto">
+    return <ul className="navbar-nav ml-auto">
         {this.checkAuthState()}
-      </ul>
-    </div>;
+    </ul>;
   }
 }
 

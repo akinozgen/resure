@@ -9,10 +9,6 @@ const Avatar = (props) => {
           src={props.pp_url}
           alt={`${props.name} on resure.space`}
         />
-      {props.self ? <div className="file btn btn-lg btn-primary">
-        Change Photo
-        <input type="file" name="file" />
-      </div> : null}
       </div>
     </div>
   )

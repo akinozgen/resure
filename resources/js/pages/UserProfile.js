@@ -6,36 +6,36 @@ import QuestionsList from "../components/QuestionsList";
 import getUser from "../api/getUser";
 import {Loader} from "../components/helpers/Loader";
 
-class UserProfilePage extends Component {
+class UserProfile extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             user: null
         };
-        
+
         this.getQuestions = this.getQuestions.bind(this);
         this.getUser = this.getUser.bind(this);
     }
-    
+
     componentDidMount() {
         console.log(this.props.username);
         this.getQuestions();
         this.getUser();
     }
-    
+
     async getQuestions() {
         const questions = await getQuestions(this.props.username);
         Array.isArray(questions.data) ? this.setState({ questions: questions.data }) : null;
         // TODO: Check for not found error.
     }
-    
+
     async getUser() {
         const user = await getUser(this.props.username);
         Array.isArray(Object.keys(user.data)) ? this.setState({ user: user.data }) : null;
         // TODO: Check for not found error.
     }
-    
+
     render() {
         return (
             this.state.user ? <div className="container emp-profile">

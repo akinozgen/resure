@@ -7,27 +7,27 @@ import QuestionsList from "../components/QuestionsList";
 class ProfilePage extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             questions: []
         };
-        
+
         this.getQuestions = this.getQuestions.bind(this);
     }
-    
+
     componentDidMount() {
         this.getQuestions();
     }
-    
+
     async getQuestions() {
         const questions = await getQuestions();
         Array.isArray(questions.data) ? this.setState({ questions: questions.data }) : null;
     }
-    
+
     componentWillUpdate(nextProps, nextState, nextContext) {
         console.log(nextState);
     }
-    
+
     render() {
         return (
             <div className="container emp-profile">
@@ -50,7 +50,7 @@ class ProfilePage extends Component {
                     </div>
                     <div className="row">
                         <div className="col-md-4">
-                        
+
                         </div>
                         <div className="col-md-8">
                             <ul
@@ -81,9 +81,7 @@ class ProfilePage extends Component {
                                         aria-controls="profile"
                                         aria-selected="false"
                                     >
-                                        {this.props.self
-                                            ? "Questions"
-                                            : "Timeline"}
+
                                     </a>
                                 </li>
                             </ul>

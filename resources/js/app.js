@@ -4,5 +4,3 @@ import Router from "./components/Router";
 require('./bootstrap');
 
 render(<Router />, document.querySelector('#app'));
-
-

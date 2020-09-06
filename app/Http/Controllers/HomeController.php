@@ -12,16 +12,16 @@ class HomeController extends Controller
     {
         return view('home');
     }
-    
+
     public function settings(Request $request)
     {
         $user = Auth::user();
-        
+
         return view('users.settings', [
             'user' => $user->toArray()
         ]);
     }
-    
+
     public function profile(Request $request)
     {
         $user = Auth::user()->toArray();
@@ -30,9 +30,9 @@ class HomeController extends Controller
             'user' => $user
         ]);
     }
-    
+
     public function profile_save_post(Request $request)
     {
-    
+
     }
 }

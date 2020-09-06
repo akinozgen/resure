@@ -13,11 +13,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/{path?}', function () {
-    return view('reactroot');
-})->name('react_root');
-
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -33,18 +28,25 @@ Route::group(['middleware' => ['auth']], function () {
 */
 
 Route::group(['prefix' => 'auth'], function () {
-    
+
     Route::get('/check_twitter_auth', 'AuthController@checkAuth');
     Route::get('/perform_logout', 'AuthController@perform_logout');
-    
+
 });
 
 Route::group(['prefix' => 'api'], function () {
-    
+
     Route::get('get_questions/{id}/{selects?}', 'QuestionsController@get_questions');
     Route::get('get_user/{username}', 'QuestionsController@get_user');
+    Route::get('get_followers/{username}', 'QuestionsController@get_followers');
+    Route::get('get_followings/{username}', 'QuestionsController@get_followings');
     Route::get('get_latest_users', 'QuestionsController@get_latest_users');
     Route::post('send_answer', 'QuestionsController@send_answer');
     Route::post('send_question', 'QuestionsController@send_question');
-    
+    Route::post('follow/{username}', 'QuestionsController@follow');
+
 });
+
+Route::get('/{path?}/{path2?}/{path3?}/{path4?}', function () {
+  return view('reactroot');
+})->name('react_root');

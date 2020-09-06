@@ -1,16 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="5809e87a-a093-40b7-a205-7e5100a30757" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/js/api/follow.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/api/getFollowers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/api/getFollowings.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/Followers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/Following.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/resure.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/resure.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/QuestionsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/QuestionsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Follow.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Follow.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_08_23_114348_add_settings_to_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_08_23_114348_add_settings_to_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/UsersSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UsersSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/api/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/api/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/Router.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/helpers/Loader.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/helpers/Loader.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/helpers/LoginUserMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/helpers/LoginUserMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/profile/Avatar.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/profile/Avatar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/NotFoundPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/NotFoundPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/SettingsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/SettingsPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/UserProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/UserProfile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/pages/UserProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/UserProfilePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/pages/Welcome.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Welcome.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/sass/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/sass/welcome.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/welcome.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,12 +64,10 @@
   </component>
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
-    <execution>
-      <executable />
-    </execution>
+    <execution />
   </component>
-  <component name="FavoritesManager">
-    <favorites_list name="resure" />
+  <component name="EditorConfigPreviewManager">
+    <editorConfig file="$PROJECT_DIR$/.editorconfig" previewFile="$PROJECT_DIR$/app/Http/Controllers/QuestionsController.php" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -136,44 +180,49 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/dbal" />
       <path value="$PROJECT_DIR$/vendor/krlove/code-generator" />
       <path value="$PROJECT_DIR$/vendor/krlove/eloquent-model-generator" />
+      <path value="$PROJECT_DIR$/vendor/league/mime-type-detection" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/vendor/symfony/error-handler" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php70" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/vendor/guzzle/guzzle" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-client" />
     </include_path>
   </component>
   <component name="ProjectId" id="1OnOuTe3MafdYzttD2pu6y6iky0" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/js/api" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="preferences.general" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/resources/js/api" />
-      <recent name="C:\Users\akino\OneDrive\Projects\resure\resources\js\api" />
-      <recent name="C:\Users\akino\OneDrive\Projects\resure\resources\js\pages" />
-      <recent name="C:\Users\akino\Projects\resure\resources\views\users" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\akino\OneDrive\Projects\resure\app\Models" />
       <recent name="C:\Users\akino\Projects\resure\public\img" />
       <recent name="C:\Users\akino\Projects\resure\img/twitter.svg" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/js/api" />
+      <recent name="$PROJECT_DIR$/resources/js/components" />
+      <recent name="C:\Users\akino\OneDrive\Projects\resure\resources\js\api" />
+      <recent name="C:\Users\akino\OneDrive\Projects\resure\resources\js\pages" />
+      <recent name="C:\Users\akino\Projects\resure\resources\views\users" />
+    </key>
   </component>
   <component name="RunManager" selected="npm.hot">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -197,6 +246,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -211,23 +261,58 @@
       <workItem from="1562741903322" duration="603000" />
       <workItem from="1564071451774" duration="1264000" />
       <workItem from="1564610120931" duration="6766000" />
+      <workItem from="1598179268411" duration="8232000" />
+      <workItem from="1598252545900" duration="134000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1872" height="294" key="GridCell.Tab.0.bottom" timestamp="1598187663940">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1872" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1598187663940" />
+    <state width="1872" height="294" key="GridCell.Tab.0.center" timestamp="1598187663940">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1872" height="294" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1598187663940" />
+    <state width="1872" height="294" key="GridCell.Tab.0.left" timestamp="1598187663939">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1872" height="294" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1598187663939" />
+    <state width="1872" height="294" key="GridCell.Tab.0.right" timestamp="1598187663940">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1872" height="294" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1598187663940" />
+    <state x="345" y="68" key="SettingsEditor" timestamp="1598179367337">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="345" y="68" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1598179367337" />
+    <state x="100" y="127" width="1166" height="541" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog" timestamp="1599410893815">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="100" y="127" width="1166" height="541" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog/0.27.1366.741@0.27.1366.741" timestamp="1599410893815" />
+    <state x="443" y="194" width="672" height="466" key="search.everywhere.popup" timestamp="1599418032188">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="623" y="243" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1598186595912" />
+    <state x="443" y="194" width="672" height="466" key="search.everywhere.popup/0.27.1366.741@0.27.1366.741" timestamp="1599418032188" />
   </component>
 </project>

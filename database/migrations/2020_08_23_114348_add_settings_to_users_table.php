@@ -14,7 +14,10 @@ class AddSettingsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->boolean('private')->default(true);
+            $table->boolean('notifications')->default(false);
+            $table->boolean('show_twitter')->default(true);
+            $table->boolean('only_anons')->default(false);
         });
     }
 
@@ -26,7 +29,10 @@ class AddSettingsToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('private');
+            $table->dropColumn('notifications');
+            $table->dropColumn('show_twitter');
+            $table->dropColumn('only_anons');
         });
     }
 }

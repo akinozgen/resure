@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Layout} from 'antd';
+import {Alert, Layout, Icon} from 'antd';
 import Card from "antd/lib/card";
-import Icon from "antd/lib/icon";
 import {Meta} from "antd/lib/list/Item";
 import Avatar from "antd/lib/avatar";
 import PageHeader from "antd/lib/page-header";
@@ -10,27 +9,31 @@ import TextArea from "antd/lib/input/TextArea";
 import Button from "antd/lib/button";
 import Modal from "antd/lib/modal";
 import sendQuestion from "../api/sendQuestion";
-import {Loader} from "../components/helpers/Loader";
 import getUser from "../api/getUser";
-import {Link} from "react-router-dom";
+import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
 import LoginUserMenu from "../components/helpers/LoginUserMenu";
 import getQuestions from "../api/getQuestions";
 import axiosResponseErrorModal from "../components/helpers/axiosResponseErrorModal";
 import Comment from "antd/lib/comment";
 import Skeleton from "antd/lib/skeleton";
 import Tooltip from "antd/lib/tooltip";
-import Switch from "antd/lib/switch";
 import sendAnswer from "../api/sendAnswer";
+import ButtonGroup from "antd/lib/button/button-group";
+import NotFoundPage from './NotFoundPage';
+import Followers from "../components/Followers";
+import Following from "../components/Following";
+import SwitchAnt from 'antd/lib/switch';
+import follow from "../api/follow";
 
 const {Content, Footer} = Layout;
 
 class UserProfilePage extends Component {
   questionContentMinLength = 10;
   questionContentMaxLength = 140;
-  
+
   constructor(props) {
     super(props);
-    
+
     this.state = {
       questionModalVisibility: false,
       questionModalLoading: false,
@@ -47,9 +50,10 @@ class UserProfilePage extends Component {
       newOnly: false,
       questionsLoading: false,
       selectedQuestion: null,
-      isAnon: true
+      isAnon: true,
+      followInProgress: false
     };
-    
+
     this.toggleQuestionModal = this.toggleQuestionModal.bind(this);
     this.toggleAnswerModal = this.toggleAnswerModal.bind(this);
     this.sendQuestion = this.sendQuestion.bind(this);
@@ -59,20 +63,24 @@ class UserProfilePage extends Component {
     this.getUser = this.getUser.bind(this);
     this.getProfileActionsDependentToSelf = this.getProfileActionsDependentToSelf.bind(this);
     this.handleNewOnly = this.handleNewOnly.bind(this);
-    
+    this.renderContent = this.renderContent.bind(this);
+    this.renderFollowing = this.renderFollowing.bind(this);
+    this.renderFollowers = this.renderFollowers.bind(this);
+    this.follow = this.follow.bind(this);
+
     if (this.props.self === false) this.getUser();
   }
-  
+
   componentDidMount() {
     this.getQuestions({newOnly: this.state.newOnly});
   }
-  
+
   async getUser() {
     const user = await getUser(this.props.username);
     Array.isArray(Object.keys(user.data)) ? this.setState({user: user.data}) : null;
     // TODO: Check for not found error.
   }
-  
+
   handleQuestionContentChange(_) {
     const isShort = this.isQuestionContentShort(_.target.value);
     const isLong = this.isQuestionContentLong(_.target.value);
@@ -82,7 +90,7 @@ class UserProfilePage extends Component {
       questionContentValidationStatus: UserProfilePage.prepareQuestionContentStatus(isShort, isLong, _.target.value)
     });
   }
-  
+
   handleAnswerContentChange(_) {
     const isShort = this.isQuestionContentShort(_.target.value);
     const isLong = this.isQuestionContentLong(_.target.value);
@@ -92,36 +100,36 @@ class UserProfilePage extends Component {
       answerContentValidationStatus: UserProfilePage.prepareQuestionContentStatus(isShort, isLong, _.target.value)
     });
   }
-  
+
   static prepareQuestionContentHelpText(isShort, isLong, content) {
     if (content.length === 0) return 'Question can\'t be empty.';
     if (isShort) return 'Your question is too short.';
     if (isLong) return 'Your qusetion is too long.';
     return '';
   }
-  
+
   static prepareAnswerContentHelpText(isShort, isLong, content) {
     if (content.length === 0) return 'Answer can\'t be empty.';
     if (isShort) return 'Your answer is too short.';
     if (isLong) return 'Your answer is too long.';
     return '';
   }
-  
+
   static prepareQuestionContentStatus(isShort, isLong, content) {
     if (content.length === 0) return 'error';
     else if (isShort || isLong) return 'error';
     else if (!isShort && !isLong) return 'success';
     return '';
   }
-  
+
   isQuestionContentShort(content) {
     return String(content).length < this.questionContentMinLength;
   }
-  
+
   isQuestionContentLong(content) {
     return String(content).length > this.questionContentMaxLength;
   }
-  
+
   toggleQuestionModal() {
     if (!this.props.state.authState) return Modal.warning({
       content: 'You need to login in order to ask a question.',
@@ -130,14 +138,14 @@ class UserProfilePage extends Component {
       onOk: () => LoginUserMenu.performLogin(),
       title: 'Warning'
     });
-    
+
     this.setState({
       questionModalVisibility: !this.state.questionModalVisibility,
       questionModalLoading: this.state.questionModalVisibility ? true : false,
       questionContent: ''
     });
   }
-  
+
   toggleAnswerModal(id = null) {
     this.setState({
       answerModalVisibility: !this.state.answerModalVisibility,
@@ -146,15 +154,15 @@ class UserProfilePage extends Component {
       selectedQuestion: typeof id === 'number' ? id : 0
     });
   }
-  
+
   sendQuestion() {
     const content = this.state.questionContent;
     const isShort = this.isQuestionContentShort(content);
     const isLong = this.isQuestionContentLong(content);
     if (UserProfilePage.prepareQuestionContentStatus(isShort, isLong, content) !== 'success') return;
-    
+
     this.setState({questionModalLoading: !this.state.questionModalLoading});
-    
+
     sendQuestion({content, to_id: this.state.user.username, isAnon: this.state.isAnon})
       .then(response => {
         Modal.success({
@@ -168,22 +176,22 @@ class UserProfilePage extends Component {
         this.toggleQuestionModal();
       });
   }
-  
+
   sendAnswer() {
     const content = this.state.answerContent;
     const isShort = this.isQuestionContentShort(content);
     const isLong = this.isQuestionContentLong(content);
     if (UserProfilePage.prepareQuestionContentStatus(isShort, isLong, content) !== 'success') return;
-    
+
     this.setState({answerModalLoading: !this.state.answerModalLoading});
-    
+
     sendAnswer({id: this.state.selectedQuestion, answer: content})
       .then(response => {
         Modal.success({
           title: 'Success',
           content: response.data.message
         });
-        
+
         this.appendAnswer();
       })
       .catch(axiosResponseErrorModal)
@@ -192,22 +200,22 @@ class UserProfilePage extends Component {
         this.toggleAnswerModal(0);
       });
   }
-  
+
   appendAnswer() {
     const question = this.state.questions.filter(_ => _.id === this.state.selectedQuestion)[0];
     const questionIndex = this.state.questions.map(_ => _.id).indexOf(question.id);
     const questions = this.state.questions;
-    
+
     question.answer = this.state.answerContent;
     question.answered_at = 'Just now';
     questions[questionIndex] = question;
-    
-    this.setState({ questions });
+
+    this.setState({questions});
   }
-  
+
   getQuestions({newOnly}) {
     this.setState({questionsLoading: true});
-    
+
     getQuestions(this.props.username, null, newOnly)
       .then(response => {
         if (response.data.status !== 'success') return axiosResponseErrorModal({response});
@@ -218,22 +226,23 @@ class UserProfilePage extends Component {
         this.setState({questionsLoading: false});
       });
   }
-  
+
   getQuestionTemplate(question) {
     const username = question.hasOwnProperty('asked_by') ? question.asked_by.username : 'Anonymous';
     const profile_picture = question.hasOwnProperty('asked_by') ? question.asked_by.profile_picture : '/img/anon-avatar.svg';
-    const href = question.hasOwnProperty('asked_by') ? (window.location.origin+'/@'+question.asked_by.username) : 'javascript:void(0)';
+    const href = question.hasOwnProperty('asked_by') ? (window.location.origin + '/@' + question.asked_by.username) : 'javascript:void(0)';
 
     return <Card bodyStyle={{padding: 0}} className="pl-4 pr-4 pt-2 pb-0 mb-2">
-      {this.state.questionsLoading ? <Skeleton key={_} avatar={true} title={true} paragraph={true} active={true} loading={true}/> :
+      {this.state.questionsLoading ?
+        <Skeleton key={_} avatar={true} title={true} paragraph={true} active={true} loading={true}/> :
         <Comment
           actions={[<span key="comment-nested-reply-to">{question.asked_at}</span>]}
           author={<a href={href}>{username} <small className="badge badge-light ml-1">asked</small></a>}
           avatar={
             <Avatar src={profile_picture} onClick={() => {
-              if (! question.hasOwnProperty('asked_by')) return;
+              if (!question.hasOwnProperty('asked_by')) return;
               window.location = href;
-            }} />
+            }}/>
           }
           content={
             <p>
@@ -249,30 +258,33 @@ class UserProfilePage extends Component {
             }
             content={question.answer}
           >
-          </Comment> : <Button className={'mb-2'} onClick={_ => this.toggleAnswerModal(question.id)} type={'primary'}>Answer</Button>}
+          </Comment> : <Button className={'mb-2'} onClick={_ => this.toggleAnswerModal(question.id)}
+                               type={'primary'}>Answer</Button>}
         </Comment>}
     </Card>;
   }
-  
+
   getGhostQuestionTemplate() {
     return Array.from('loading').map(_ => <Card bodyStyle={{padding: 0}} className="pl-4 pr-4 pt-2 pb-0 mb-2">
       <Skeleton key={_} avatar={true} title={true} paragraph={true} active={true} loading={true}/>
     </Card>);
   }
-  
+
   getProfileActionsDependentToSelf() {
     if (this.props.self === true) return [
       <Tooltip key={0} title={'Settings'}>
-        <Link to={'/settings'}><Icon type="setting" key="setting"/></Link>
+        <Link to={'/settings'}><Icon type="setting"/></Link>
       </Tooltip>,
       <Tooltip key={1} title={'Edit Profile'}>
-        <Link to={'/profile_edit'}><Icon type="edit" key="edit"/></Link>
+        <Link to={'/profile_edit'}><Icon type="edit"/></Link>
       </Tooltip>,
-      <Tooltip key={1} title={'Logout'}>
-        <Icon type="logout" key="ellipsis" onClick={LoginUserMenu.performLogout}/>
+      <Tooltip key={2} title={'Logout'}>
+        <span onClick={LoginUserMenu.performLogout}>
+          <Icon type="logout"/>
+        </span>
       </Tooltip>,
     ];
-    
+
     return [
       <Link to={`/@${this.state.user.username}/followers`}>
         <i className="fa fa-user-friends"/>
@@ -282,29 +294,135 @@ class UserProfilePage extends Component {
         <i className="fa fa-users"/>
         {this.state.user.total_followings} Following
       </Link>,
-      <a>
+      <Link to={`/@${this.state.user.username}`}>
         <i className="fa fa-star"/>
         {this.state.user.total_answered} Answers
-      </a>,
+      </Link>,
     ];
   }
-  
+
   handleNewOnly() {
     const newOnly = !this.state.newOnly;
     this.setState({
       newOnly
     });
-    
+
     this.getQuestions({newOnly});
   }
-  
+
+  renderQuestions() {
+    if (this.state.user.private) {
+      return <Alert
+        message="This person has a private account. You need to follow him/her to view answers."
+        type="warning" showIcon/>;
+    }
+
+    return <div className="questions_list">{
+      this.state.questionsLoading ? this.getGhostQuestionTemplate() : this.state.questions.map(this.getQuestionTemplate.bind(this))
+    }</div>;
+  }
+
+  openTwitter() {
+    window.open('https://twitter.com/' + this.state.user.username);
+  }
+
+  renderContent() {
+    const {path} = this.props.router.match;
+
+    return <div className="col-md-8 col-sm-12">
+      <Card bodyStyle={{padding: 0}} className={'mb-2'}>
+        <PageHeader
+          onBack={() => window.history.back()}
+          title={this.state.user.name}
+        >
+          <div className="wrap">
+            {this.props.self ?
+              <div className="extraContent row">
+                <div className="col-12">
+                  <p>Questions sent to you</p>
+                </div>
+                <div className="col-12">
+                  <Form layout={'inline'}>
+                    <Form.Item label="Unanswered Only">
+                      <SwitchAnt checked={this.state.newOnly}
+                              onClick={this.handleNewOnly}/>
+                    </Form.Item>
+                  </Form>
+                </div>
+              </div> :
+              <div className="extraContent row">
+                <div className="col-md-12">
+                  <p>
+                    Answered questions by {this.state.user.name}
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+        </PageHeader>
+      </Card>
+
+      <Switch>
+        <Route exact path={path}>
+          {this.renderQuestions()}
+        </Route>
+        <Route path={`${path}/following`}>
+          {this.renderFollowing()}
+        </Route>
+        <Route path={`${path}/followers`}>
+          {this.renderFollowers()}
+        </Route>
+      </Switch>
+    </div>;
+  }
+
+  renderFollowing() {
+    return <Following user={this.state.user} />;
+  }
+
+  renderFollowers() {
+    return <Followers user={this.state.user} />;
+  }
+
+  async follow() {
+    if (this.state.user.is_followed) {
+      return this.unfollow();
+    }
+
+    this.setState({ followInProgress: true });
+    const result = await follow(this.state.user.username, true);
+
+    if (result.data.status === 'success') {
+      const user = this.state.user;
+      user.is_followed = true;
+
+      this.setState({ isFollowing: true, user })
+    }
+
+    this.setState({ followInProgress: false });
+  }
+
+  async unfollow() {
+    this.setState({ followInProgress: true });
+    const result = await follow(this.state.user.username, false);
+
+    if (result.data.status === 'success') {
+      const user = this.state.user;
+      user.is_followed = false;
+
+      this.setState({ isFollowing: true, user })
+    }
+
+    this.setState({ followInProgress: false });
+  }
+
   render() {
-    if (!this.state.user && this.props.self === false) return <div className="onAuthFail"><Loader/></div>;
-    
+    if (!this.state.user && this.props.self === false) return <div className="onAuthFail"><NotFoundPage/></div>;
+
     return (
       <div className={'container'}>
         <Content className={'pt-3 row'}>
-          <div className="col-md-4 col-sm-6 col-xs-12">
+          <div className="col-md-4 col-sm-6 col-sm-12">
             <Card
               cover={<img src={this.state.user.banner_url}/>}
               actions={this.getProfileActionsDependentToSelf()}
@@ -314,46 +432,36 @@ class UserProfilePage extends Component {
                 title={this.state.user.name}
                 description={this.state.user.bio ? this.state.user.bio : '[bio not set]'}
               />
-              <Button hidden={this.props.self} type={'danger'} className={'mt-3'} block onClick={this.toggleQuestionModal}>
-                Want to ask a question <Icon type={"question"}/>
-              </Button>
+              <ButtonGroup className="mt-3">
+                <Button
+                  hidden={this.props.self}
+                  icon='question'
+                  type={'danger'}
+                  onClick={this.toggleQuestionModal}>
+                  Ask
+                </Button>
+                <Button
+                  hidden={this.props.self}
+                  type={this.state.user.is_followed ? 'danger' : 'success'}
+                  loading={this.state.followInProgress}
+                  icon={this.state.user.is_followed ? 'user-delete' : 'user-add'}
+                  onClick={this.follow}>
+                  {this.state.user.is_followed ? 'Unfollow' : 'Follow'}
+                </Button>
+                <Button
+                  hidden={this.props.self || !this.state.user.show_twitter}
+                  type={'primary'}
+                  icon="twitter"
+                  onClick={this.openTwitter.bind(this)}>
+                  Twitter
+                </Button>
+              </ButtonGroup>
             </Card>
           </div>
-          <div className="col-md-8 col-sm-12">
-            <Card bodyStyle={{padding: 0}} className={'mb-2'}>
-              <PageHeader
-                onBack={() => window.history.back()}
-                title={this.state.user.name}
-              >
-                <div className="wrap">
-                  {!this.state.self ?
-                    <div className="extraContent row">
-                      <div className="col-12">
-                        <p>Questions sent to you</p>
-                      </div>
-                      <div className="col-12">
-                        <Form layout={'inline'}>
-                          <Form.Item label="New Only">
-                            <Switch checked={this.state.newOnly} onClick={this.handleNewOnly}/>
-                          </Form.Item>
-                        </Form>
-                      </div>
-                    </div> :
-                    <div className="extraContent row">
-                      <div className="col-xs-12"><p>Answered questions by {this.state.user.name}</p></div>
-                    </div>
-                  }
-                </div>
-              </PageHeader>
-            </Card>
-            
-            <div className="questions_list">{
-              this.state.questionsLoading ? this.getGhostQuestionTemplate() : this.state.questions.map(this.getQuestionTemplate.bind(this))
-            }</div>
-          </div>
-        
+          {this.renderContent()}
+
         </Content>
-        
+
         <Modal
           okText={'Send'}
           cancelText={'Nevermind'}
@@ -377,11 +485,11 @@ class UserProfilePage extends Component {
               />
             </Form.Item>
             <Form.Item label="Anonymous" labelAlign="left">
-              <Switch defaultChecked onChange={_ => this.setState({ isAnon: _ })} />
+              <SwitchAnt defaultChecked onChange={_ => this.setState({isAnon: _})}/>
             </Form.Item>
           </Form>
         </Modal>
-        
+
         <Modal
           okText={'Send'}
           cancelText={'Nevermind'}
