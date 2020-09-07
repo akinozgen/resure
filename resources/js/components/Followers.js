@@ -6,8 +6,8 @@ import getFollowers from "../api/getFollowers";
 import BottomScrollListener from "react-bottom-scroll-listener";
 
 class Followers extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       followers: [],
       start: 0,
@@ -30,7 +30,6 @@ class Followers extends React.Component {
   }
 
   async getFollowers() {
-    console.log('started')
     if (this.state.locked === true) return;
     this.setState({locked: true});
 

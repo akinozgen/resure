@@ -20,42 +20,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5809e87a-a093-40b7-a205-7e5100a30757" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/js/api/follow.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/api/getFollowers.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/api/getFollowings.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/components/Followers.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/components/Following.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/resure.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/resure.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/api/setUserId.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Enums/Responses.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Enums/Responses.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/QuestionsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/QuestionsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Follow.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Follow.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_08_23_114348_add_settings_to_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_08_23_114348_add_settings_to_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/UsersSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UsersSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/api/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/api/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/Followers.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Followers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/Router.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/helpers/Loader.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/helpers/Loader.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/helpers/LoginUserMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/helpers/LoginUserMenu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/profile/Avatar.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/profile/Avatar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/pages/NotFoundPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/NotFoundPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/pages/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Profile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/pages/SettingsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/SettingsPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/pages/UserProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/UserProfile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/pages/UserProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/UserProfilePage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/pages/Welcome.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/pages/Welcome.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/sass/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/app.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/sass/welcome.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/welcome.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/reactroot.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/reactroot.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,11 +193,6 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\akino\OneDrive\Projects\resure\app\Models" />
-      <recent name="C:\Users\akino\Projects\resure\public\img" />
-      <recent name="C:\Users\akino\Projects\resure\img/twitter.svg" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/resources/js/api" />
       <recent name="$PROJECT_DIR$/resources/js/components" />
@@ -223,13 +200,18 @@
       <recent name="C:\Users\akino\OneDrive\Projects\resure\resources\js\pages" />
       <recent name="C:\Users\akino\Projects\resure\resources\views\users" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\akino\OneDrive\Projects\resure\app\Models" />
+      <recent name="C:\Users\akino\Projects\resure\public\img" />
+      <recent name="C:\Users\akino\Projects\resure\img/twitter.svg" />
+    </key>
   </component>
   <component name="RunManager" selected="npm.hot">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner scope="XML" />
       <method v="2" />
     </configuration>
-    <configuration name="hot" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+    <configuration name="hot" type="js.build_tools.npm" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
       <scripts>
@@ -240,11 +222,6 @@
       <envs />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="npm.hot" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -285,22 +262,34 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1872" height="294" key="GridCell.Tab.0.bottom" timestamp="1598187663940">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="141" y="55" width="1084" height="708" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599496829869">
+      <screen x="0" y="28" width="1366" height="740" />
+    </state>
+    <state x="141" y="55" width="1084" height="708" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.28.1366.740@0.28.1366.740" timestamp="1599496829869" />
+    <state x="555" y="181" width="245" height="452" key="EnvironmentVariablesDialog" timestamp="1599496805260">
+      <screen x="0" y="28" width="1366" height="740" />
+    </state>
+    <state x="555" y="181" width="245" height="452" key="EnvironmentVariablesDialog/0.28.1366.740@0.28.1366.740" timestamp="1599496805260" />
+    <state width="1324" height="151" key="GridCell.Tab.0.bottom" timestamp="1599506053843">
+      <screen x="0" y="28" width="1366" height="740" />
     </state>
     <state width="1872" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1598187663940" />
-    <state width="1872" height="294" key="GridCell.Tab.0.center" timestamp="1598187663940">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1324" height="151" key="GridCell.Tab.0.bottom/0.28.1366.740@0.28.1366.740" timestamp="1599506053843" />
+    <state width="1324" height="151" key="GridCell.Tab.0.center" timestamp="1599506053843">
+      <screen x="0" y="28" width="1366" height="740" />
     </state>
     <state width="1872" height="294" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1598187663940" />
-    <state width="1872" height="294" key="GridCell.Tab.0.left" timestamp="1598187663939">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1324" height="151" key="GridCell.Tab.0.center/0.28.1366.740@0.28.1366.740" timestamp="1599506053843" />
+    <state width="1324" height="151" key="GridCell.Tab.0.left" timestamp="1599506053843">
+      <screen x="0" y="28" width="1366" height="740" />
     </state>
     <state width="1872" height="294" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1598187663939" />
-    <state width="1872" height="294" key="GridCell.Tab.0.right" timestamp="1598187663940">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1324" height="151" key="GridCell.Tab.0.left/0.28.1366.740@0.28.1366.740" timestamp="1599506053843" />
+    <state width="1324" height="151" key="GridCell.Tab.0.right" timestamp="1599506053843">
+      <screen x="0" y="28" width="1366" height="740" />
     </state>
     <state width="1872" height="294" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1598187663940" />
+    <state width="1324" height="151" key="GridCell.Tab.0.right/0.28.1366.740@0.28.1366.740" timestamp="1599506053843" />
     <state x="345" y="68" key="SettingsEditor" timestamp="1598179367337">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -309,10 +298,15 @@
       <screen x="0" y="27" width="1366" height="741" />
     </state>
     <state x="100" y="127" width="1166" height="541" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog/0.27.1366.741@0.27.1366.741" timestamp="1599410893815" />
-    <state x="443" y="194" width="672" height="466" key="search.everywhere.popup" timestamp="1599418032188">
-      <screen x="0" y="27" width="1366" height="741" />
+    <state x="0" y="28" width="582" height="740" key="find.popup" timestamp="1599504079069">
+      <screen x="0" y="28" width="1366" height="740" />
+    </state>
+    <state x="0" y="28" width="582" height="740" key="find.popup/0.28.1366.740@0.28.1366.740" timestamp="1599504079069" />
+    <state x="443" y="195" width="672" height="466" key="search.everywhere.popup" timestamp="1599504849858">
+      <screen x="0" y="28" width="1366" height="740" />
     </state>
     <state x="623" y="243" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1598186595912" />
     <state x="443" y="194" width="672" height="466" key="search.everywhere.popup/0.27.1366.741@0.27.1366.741" timestamp="1599418032188" />
+    <state x="443" y="195" width="672" height="466" key="search.everywhere.popup/0.28.1366.740@0.28.1366.740" timestamp="1599504849858" />
   </component>
 </project>

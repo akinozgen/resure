@@ -36,7 +36,7 @@ export default class WelcomePage extends React.Component {
         return (
             <Tooltip title={user.name}>
                 <Link
-                    to={`@${user.username}`}
+                    to={`@${user.username}/questions`}
                     className={'user-block mr-2'}>
                     <Avatar className={user.isNew ? 'new_user' : ''} src={user.pp_url} size={70}>{user.isNew ? 'new' : ''} {user.username}</Avatar>
                 </Link>

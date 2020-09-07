@@ -57,9 +57,8 @@ export default class Router extends React.Component {
   authSuccessRoutes() {
       return <div className="onAuthSuccess">
           <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
-          <Route exact path={'/profile'} component={router => <UserProfilePage router={router} content="user" self={true} state={this.state} setState={this.setState.bind(this)} />} />
+          <Route path={'/profile'} component={router => <UserProfilePage router={router} content="user" self={true} state={this.state} setState={this.setState.bind(this)} />} />
           <Route exact path={'/profile_edit'} component={() => <ProfilePage self={true} state={this.state} setState={this.setState.bind(this)} />} />
-          <Route exact path={'/settings'} component={router => <SettingsPage user={this.state.user} self={true} state={this.state} setState={this.setState.bind(this)} />} />
           <Route path={'/@:username'} component={router => <UserProfilePage router={router} content="user" state={this.state} username={router.match.params.username} self={false} />} />
       </div>;
   }
@@ -67,12 +66,11 @@ export default class Router extends React.Component {
   noAuthRoutes() {
       return <div>
           <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
-          <Route path={'/@:username'} component={router => {
+          <Route path={'/:username'} component={router => {
               if (!router.match.params.username.includes('@')) return <NotFoundPage router={router} />;
 
               return <UserProfilePage router={router} content="user" username={router.match.params.username.replace('@', '')} state={this.state} self={false} />;
           }} />
-          <NotFoundPage />
       </div>;
   }
 

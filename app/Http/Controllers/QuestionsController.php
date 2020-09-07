@@ -85,7 +85,7 @@ class QuestionsController extends Controller
 
     public function get_user($username = null)
     {
-        if (!$username) return new Response(404, [], ['error' => 'User not found.']);
+        if (!$username) return new Response(['error' => 'User not found.'], Responses::STATUS_NOT_FOUND, ['Content-type' => 'application/json']);
 
         $user = User::query()
             ->select(['id', 'username', 'banner_url', 'bio', 'email', 'name', 'pp_url', 'private', 'only_anons', 'show_twitter'])
@@ -113,23 +113,25 @@ class QuestionsController extends Controller
             ->first()
             ->total;
 
-        $isFollowed = Follow::query()
-            ->where('follower_user_id', auth()->user()->id)
-            ->where('following_user_id', $user->id)
-            ->first();
+        if (\auth()->user()) {
+            $isFollowed = Follow::query()
+                ->where('follower_user_id', auth()->user()->id)
+                ->where('following_user_id', $user->id)
+                ->first();
 
-        $isFollowing = Follow::query()
-            ->where('following_user_id', $user->id)
-            ->where('follower_user_id', auth()->user()->id)
-            ->first();
+            $isFollowing = Follow::query()
+                ->where('follower_user_id', $user->id)
+                ->where('following_user_id', auth()->user()->id)
+                ->first();
+        }
 
-        $user->is_followed = (bool)$isFollowed;
-        $user->is_following = (bool)$isFollowing;
+        $user->is_followed = (bool)@$isFollowed;
+        $user->is_following = (bool)@$isFollowing;
         $user->total_followers = $followers;
         $user->total_followings = $followings;
         $user->total_answered = $answereds;
 
-        if (!$user) return new Response(404, [], ['error' => 'User not found.']);
+        if (!$user) return new Response(['error' => 'User not found.'], Responses::STATUS_NOT_FOUND, ['Content-type' => 'application/json']);
 
         $user->id = null;
         return collect($user->getAttributes())->filter(function ($x) {
@@ -221,11 +223,11 @@ class QuestionsController extends Controller
     public function get_followers($username = null)
     {
         sleep(1);
-        if (!$username) return new Response(404, [], ['error' => 'User not found.']);
+        if (!$username) return new Response(['error' => 'User not found.'], Responses::STATUS_NOT_FOUND);
         $user = User::query()
             ->where('username', $username)
             ->first();
-        if (!$user) return new Response(404, [], ['error' => 'User not found.']);
+        if (!$user) return new Response(['error' => 'User not found.'], Responses::STATUS_NOT_FOUND);
 
         $followers = Follow::query()
             ->where('following_user_id', $user->id)
@@ -253,14 +255,15 @@ class QuestionsController extends Controller
             })
         ];
     }
+
     public function get_followings($username = null)
     {
         sleep(1);
-        if (!$username) return new Response(404, [], ['error' => 'User not found.']);
+        if (!$username) return new Response(['error' => 'User not found.'], Responses::STATUS_NOT_FOUND, ['Content-type' => 'application/json']);
         $user = User::query()
             ->where('username', $username)
             ->first();
-        if (!$user) return new Response(404, [], ['error' => 'User not found.']);
+        if (!$user) return new Response(['error' => 'User not found.'], Responses::STATUS_NOT_FOUND, ['Content-type' => 'application/json']);
 
         $followers = Follow::query()
             ->where('follower_user_id', $user->id)
@@ -292,12 +295,15 @@ class QuestionsController extends Controller
     public function follow(Request $request, $username)
     {
         sleep(1);
-        if (!$username) return new Response(404, [], ['error' => 'User not found.']);
-        if (!$request->has('follow')) return new Response(404, [], ['error' => 'Can\'t follow.']);
+        if (!$username) return new Response(['error' => 'User not found.'], Responses::STATUS_NOT_FOUND, ['Content-type' => 'application/json']);
+        if (!$request->has('follow')) return new Response(['error' => 'Can\'t follow.'], Responses::STATUS_NOT_FOUND, ['Content-type' => 'application/json']);
+        if (!\auth()->user()) return new Response(['status' => 'error', 'message' => Responses::LOGIN_TO_FOLLOW], Responses::STATUS_ERR_AUTH, ['Content-type' => 'application/json']);
+
         $user = User::query()
             ->where('username', $username)
             ->first();
-        if (!$user) return new Response(404, [], ['error' => 'User not found.']);
+        if (!$user) return new Response(['error' => 'User not found.'], Responses::STATUS_NOT_FOUND, ['Content-type' => 'application/json']);
+        if (\auth()->user()->id == $user->id) return new Response(['status' => 'error', 'message' => Responses::CANT_FOLLOW_YOURSELF], Responses::STATUS_ERR_AUTH, ['Content-type' => 'application/json']);
 
         if ($request->follow == 'false') {
             $follows = Follow::query()
@@ -315,10 +321,50 @@ class QuestionsController extends Controller
             $follow->follower_user_id = \auth()->user()->id;
             $follow->following_user_id = $user->id;
             $op = @$follow->save();
+            $this->sendNotification($user);
         }
 
         return [
             'status' => @$op ? 'success' : 'error'
         ];
+    }
+
+    public function set_user_id(Request $request)
+    {
+        if (!\auth()->user()) return new Response(['status' => 'error', 'message' => Responses::LOGIN_TO_FOLLOW], Responses::STATUS_ERR_AUTH, ['Content-type' => 'application/json']);
+        auth()->user()->onesignal_id = $request->userId;
+        auth()->user()->save();
+
+        return null;
+    }
+
+    private function sendNotification($user)
+    {
+        $userId = $user->onesignal_id;
+        if (!$userId) return;
+
+        $content = array(
+            "en" => \auth()->user()->name . ' followed you on resure.space.',
+            "tr" => \auth()->user()->name . ' seni resure.space\'de takip etti.'
+        );
+
+        $fields = array(
+            'app_id' => "3ad720b3-9624-4636-97da-feabe1dd68cd",
+            'include_player_ids' => array($userId),
+            'contents' => $content
+        );
+
+        $fields = json_encode($fields);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
     }
 }

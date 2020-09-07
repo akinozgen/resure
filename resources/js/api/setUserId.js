@@ -4,12 +4,12 @@ import {API_CONFIG} from './config';
 /**
  * @returns {Promise<AxiosResponse<T>>}
  */
-export default function ({id, answer}) {
+export default function ({userId}) {
   return axios({
-    url: `${API_CONFIG.url}/send_answer`,
+    url: `${API_CONFIG.url}/set_user_id`,
     method: 'post',
     data: {
-      id, answer
+      userId
     }
   });
 };

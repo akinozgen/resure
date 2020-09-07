@@ -78,12 +78,8 @@
   height: 70px;
 }
 
-i.anticon {
+button > i.anticon {
     display: block;
     float: left;
 }
 
-.ant-tooltip-placement-top .ant-tooltip-arrow {
-    transform: translateX(-50%) rotate(45deg) !important;
-    bottom: 5.928932px !important;
-}

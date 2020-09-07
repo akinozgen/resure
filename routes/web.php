@@ -44,6 +44,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('send_answer', 'QuestionsController@send_answer');
     Route::post('send_question', 'QuestionsController@send_question');
     Route::post('follow/{username}', 'QuestionsController@follow');
+    Route::post('set_user_id', 'QuestionsController@set_user_id');
 
 });
 

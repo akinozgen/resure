@@ -30,18 +30,18 @@ class LoginUserMenu extends React.Component {
           </Link>
         </Menu.Item>
         <Menu.Item key="1">
-          <Link to="/profile" className="nav-link">
+          <Link to="/profile/questions" className="nav-link">
             Profile
           </Link>
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key="2">
-          <Link to="/my_followers" className="nav-link">
+          <Link to="/profile/followers" className="nav-link">
             My Followers
           </Link>
         </Menu.Item>
         <Menu.Item key="3">
-          <Link to="/following" className="nav-link">
+          <Link to="/profile/following" className="nav-link">
             Following
           </Link>
         </Menu.Item>

@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  
+
   <title>{{ config('app.name', 'Laravel') }}</title>
   <script src="https://kit.fontawesome.com/4bd12d0ec5.js"></script>
   <link rel="manifest" href="/mix-manifest.json">
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-  
+
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -21,5 +21,6 @@
 <div id="app">
 </div>
 <script src="{{ mix('js/app.js') }}"></script>
+<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
 </body>
 </html>

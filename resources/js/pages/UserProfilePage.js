@@ -24,6 +24,7 @@ import Followers from "../components/Followers";
 import Following from "../components/Following";
 import SwitchAnt from 'antd/lib/switch';
 import follow from "../api/follow";
+import SettingsPage from "./SettingsPage";
 
 const {Content, Footer} = Layout;
 
@@ -214,6 +215,7 @@ class UserProfilePage extends Component {
   }
 
   getQuestions({newOnly}) {
+    if (this.state.questionsLoading) return ;
     this.setState({questionsLoading: true});
 
     getQuestions(this.props.username, null, newOnly)
@@ -273,29 +275,29 @@ class UserProfilePage extends Component {
   getProfileActionsDependentToSelf() {
     if (this.props.self === true) return [
       <Tooltip key={0} title={'Settings'}>
-        <Link to={'/settings'}><Icon type="setting"/></Link>
+        <Link to={'/profile/settings'}><Icon type="setting"/></Link>
       </Tooltip>,
       <Tooltip key={1} title={'Edit Profile'}>
-        <Link to={'/profile_edit'}><Icon type="edit"/></Link>
+        <Link to={'/profile/edit'}><Icon type="edit"/></Link>
       </Tooltip>,
-      <Tooltip key={2} title={'Logout'}>
-        <span onClick={LoginUserMenu.performLogout}>
-          <Icon type="logout"/>
-        </span>
-      </Tooltip>,
+      <span onClick={LoginUserMenu.performLogout}>
+        <Tooltip key={2} title={'Logout'}>
+            <Icon type="logout"/>
+        </Tooltip>
+      </span>
     ];
 
     return [
       <Link to={`/@${this.state.user.username}/followers`}>
-        <i className="fa fa-user-friends"/>
+        <i className="fa fa-user-friends"/><br/>
         {this.state.user.total_followers} Followers
       </Link>,
       <Link to={`/@${this.state.user.username}/following`}>
-        <i className="fa fa-users"/>
+        <i className="fa fa-users"/><br/>
         {this.state.user.total_followings} Following
       </Link>,
-      <Link to={`/@${this.state.user.username}`}>
-        <i className="fa fa-star"/>
+      <Link to={`/@${this.state.user.username}/questions`}>
+        <i className="fa fa-star"/><br/>
         {this.state.user.total_answered} Answers
       </Link>,
     ];
@@ -363,7 +365,7 @@ class UserProfilePage extends Component {
       </Card>
 
       <Switch>
-        <Route exact path={path}>
+        <Route path={`${path}/questions`}>
           {this.renderQuestions()}
         </Route>
         <Route path={`${path}/following`}>
@@ -372,6 +374,14 @@ class UserProfilePage extends Component {
         <Route path={`${path}/followers`}>
           {this.renderFollowers()}
         </Route>
+        {this.props.self ? [
+          <Route path={`${path}/settings`}>
+            <SettingsPage />
+          </Route>,
+          <Route path={`${path}/edit`}>
+            Profile Edit
+          </Route>
+        ]: null}
       </Switch>
     </div>;
   }
@@ -384,22 +394,30 @@ class UserProfilePage extends Component {
     return <Followers user={this.state.user} />;
   }
 
-  async follow() {
+  follow() {
     if (this.state.user.is_followed) {
       return this.unfollow();
     }
 
-    this.setState({ followInProgress: true });
-    const result = await follow(this.state.user.username, true);
+    this.setState({ followInProgress: true })
+    follow(this.state.user.username, true)
+      .then(result => {
 
-    if (result.data.status === 'success') {
-      const user = this.state.user;
-      user.is_followed = true;
+        if (result.data.status === 'success') {
+          const user = this.state.user;
+          user.is_followed = true;
 
-      this.setState({ isFollowing: true, user })
-    }
+          this.setState({ isFollowing: true, user })
+        } else {
+          axiosResponseErrorModal(result);
+        }
 
-    this.setState({ followInProgress: false });
+        this.setState({ followInProgress: false });
+      })
+      .catch(result => {
+        axiosResponseErrorModal(result);
+        this.setState({ followInProgress: false });
+      });
   }
 
   async unfollow() {
@@ -416,8 +434,21 @@ class UserProfilePage extends Component {
     this.setState({ followInProgress: false });
   }
 
+  getDescription() {
+    let biographyText = this.state.user.bio ? this.state.user.bio : '[bio not set]';
+    if (this.props.self === true) {
+      return biographyText;
+    }
+    let isFollowing = '';
+    if (this.state.user.is_following) {
+      isFollowing = ' (follows you)';
+    }
+
+    return biographyText+isFollowing;
+  }
+
   render() {
-    if (!this.state.user && this.props.self === false) return <div className="onAuthFail"><NotFoundPage/></div>;
+    // if (!this.state.user && this.props.self === false) return <div className="onAuthFail"><NotFoundPage/></div>;
 
     return (
       <div className={'container'}>
@@ -430,7 +461,7 @@ class UserProfilePage extends Component {
               <Meta
                 avatar={<Avatar src={this.state.user.pp_url}>{this.state.user.name}</Avatar>}
                 title={this.state.user.name}
-                description={this.state.user.bio ? this.state.user.bio : '[bio not set]'}
+                description={this.getDescription(this.state.user)}
               />
               <ButtonGroup className="mt-3">
                 <Button
@@ -458,7 +489,7 @@ class UserProfilePage extends Component {
               </ButtonGroup>
             </Card>
           </div>
-          {this.renderContent()}
+          {this.state.user ? this.renderContent() : null}
 
         </Content>
 
