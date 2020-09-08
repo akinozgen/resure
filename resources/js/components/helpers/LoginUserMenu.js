@@ -25,7 +25,7 @@ class LoginUserMenu extends React.Component {
     return (
       <Menu>
         <Menu.Item key="0">
-          <Link className="nav-link" to="/">
+          <Link className="nav-link" to="/profile/settings">
             Settings
           </Link>
         </Menu.Item>

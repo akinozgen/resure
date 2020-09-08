@@ -15,12 +15,12 @@ class SocialAuthController extends Controller
     {
         $user = $this->createOrGetUser(Socialite::driver($provider));
         auth()->login($user);
-        
-        return redirect()->route('react_root')->with('auth', [
+
+        return redirect()->to('/feed')->with('auth', [
             'user' => $user
         ]);
     }
-    
+
     private function createOrGetUser(Provider $provider)
     {
         $providerUser = $provider->user();
@@ -30,7 +30,7 @@ class SocialAuthController extends Controller
             ->where('provider', $providerName)
             ->where('provider_id', $providerUser->getId())
             ->first();
-        
+
         if (!$user) {
             $user = User::create([
                 'name' => @$providerUser->getName(),
@@ -56,16 +56,16 @@ class SocialAuthController extends Controller
                 'twitter_data' => json_encode($providerUser->user, JSON_PRETTY_PRINT)
             ])->save();
         }
-        
+
         return $user;
     }
-    
+
     public function logout(Request $request)
     {
         AuthFacade::logout();
         return redirect()->route('react_root');
     }
-    
+
     public function redirect($provider)
     {
         return Socialite::driver($provider)->redirect();

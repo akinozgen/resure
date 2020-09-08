@@ -36,4 +36,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function getFollowersCount($user_id)
+    {
+        return Follow::query()
+            ->where('following_user_id', $user_id)
+            ->count('id');
+    }
+
+    public static function getFollowingCount($user_id)
+    {
+        return Follow::query()
+            ->where('follower_user_id', $user_id)
+            ->count('id');
+    }
+
 }

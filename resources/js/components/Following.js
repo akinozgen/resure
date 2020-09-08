@@ -1,9 +1,11 @@
 import React from 'react';
-import {Avatar, Card, Comment} from "antd";
+import {Avatar, Button, Card, Comment} from "antd";
 import {Link} from "react-router-dom";
 import {Loader} from "./helpers/Loader";
 import getFollowings from "../api/getFollowings";
 import BottomScrollListener from "react-bottom-scroll-listener";
+import follow from "../api/follow";
+import Title from "antd/lib/typography/Title";
 
 class Following extends React.Component {
   constructor() {
@@ -20,6 +22,8 @@ class Following extends React.Component {
     this.getFollowings = this.getFollowings.bind(this);
     this.renderFollowings = this.renderFollowings.bind(this);
     this.loadNew = this.loadNew.bind(this);
+    this.renderActions = this.renderActions.bind(this);
+    this.unfollow = this.unfollow.bind(this);
   }
 
   componentDidMount() {
@@ -42,7 +46,10 @@ class Following extends React.Component {
 
     const newUsers = Array.from(
       [...this.state.followings, ..._users.data.followings]
-    ).filter((v, i, a) => a.indexOf(v) === i);
+    ).filter((v, i, a) => a.indexOf(v) === i).map(user => {
+      user.loading = false
+      return user;
+    });
 
     return Array.isArray(Object.keys(_users.data)) ? this.setState({
       followings: newUsers,
@@ -60,24 +67,49 @@ class Following extends React.Component {
     this.getFollowings();
   }
 
+  async unfollow(user) {
+    const username = user.username;
+    let followings = this.state.followings.map(following => {
+      if (following.username === username) {
+        following.loading = true;
+      }
+      return following;
+    });
+    this.setState({ followings });
+
+    const result = await follow(username, false);
+
+    if (result.data.status === 'success') {
+      followings = this.state.followings.filter(user => user.username !== username);
+      this.setState({ followings });
+    }
+  }
+
+  renderActions(following) {
+    return [
+      <Button loading={following.loading} type={'link'} className={'text-danger'} onClick={() => this.unfollow(following)}>Unfollow</Button>
+    ];
+  }
+
   renderFollowings() {
     return this.state.followings.map(following => {
       return <Card className={'mb-2'}>
         <Comment
-          author={<Link to={`/@${following.username}`}><h5 className={'mb-1'}>{following.name}</h5></Link>}
+          author={<a href={`/@${following.username}/questions`}><h5 className={'mb-1'}>{following.name}</h5></a>}
           avatar={
-            <Link to={`/@${following.username}`}>
+            <a href={`/@${following.username}/questions`}>
               <Avatar
                 src={following.profile_pic_url}
                 alt={`${following.name} on resure.space`}
               />
-            </Link>
+            </a>
           }
           content={
             <p>
               {following.bio}
             </p>
           }
+            actions={this.props.self === true ? this.renderActions(following) : null}
         />
       </Card>;
     });
@@ -86,8 +118,11 @@ class Following extends React.Component {
   render() {
     return <BottomScrollListener
       debounce={500}
-      onBottom={(this.state.totalFollowings == this.state.length+this.state.start) ? () => null : this.loadNew}
+      onBottom={(this.state.totalFollowings == this.state.followings.length) ? () => null : this.loadNew}
       triggerOnNoScroll={false}>
+      <Title level={3}>
+        Followed by {this.props.self === true ? 'You' : this.props.user.name}
+      </Title>
       {this.renderFollowings()}
       {this.state.loading ? <Loader /> : null}
     </BottomScrollListener>;

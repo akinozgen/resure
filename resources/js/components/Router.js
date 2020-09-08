@@ -7,6 +7,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import UserProfilePage from "../pages/UserProfilePage";
 import ProfilePage from "../pages/Profile";
 import SettingsPage from "../pages/SettingsPage";
+import FeedPage from "./FeedPage";
 
 export default class Router extends React.Component {
   constructor(props) {
@@ -56,16 +57,17 @@ export default class Router extends React.Component {
 
   authSuccessRoutes() {
       return <div className="onAuthSuccess">
-          <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
-          <Route path={'/profile'} component={router => <UserProfilePage router={router} content="user" self={true} state={this.state} setState={this.setState.bind(this)} />} />
-          <Route exact path={'/profile_edit'} component={() => <ProfilePage self={true} state={this.state} setState={this.setState.bind(this)} />} />
-          <Route path={'/@:username'} component={router => <UserProfilePage router={router} content="user" state={this.state} username={router.match.params.username} self={false} />} />
+        <Route exact path={'/'} component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
+        <Route exact path={'/feed'} initial component={() => <FeedPage state={this.state} setState={this.setState.bind(this)} />} />
+        <Route path={'/profile'} component={router => <UserProfilePage router={router} content="user" self={true} state={this.state} setState={this.setState.bind(this)} />} />
+        <Route exact path={'/profile_edit'} component={() => <ProfilePage self={true} state={this.state} setState={this.setState.bind(this)} />} />
+        <Route path={'/@:username'} component={router => <UserProfilePage router={router} content="user" state={this.state} username={router.match.params.username} self={false} />} />
       </div>;
   }
 
   noAuthRoutes() {
       return <div>
-          <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
+        <Route exact path={'/'} initial component={() => <WelcomePage state={this.state} setState={this.setState.bind(this)} />} />
           <Route path={'/:username'} component={router => {
               if (!router.match.params.username.includes('@')) return <NotFoundPage router={router} />;
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, Layout, Icon} from 'antd';
+import {Alert, Layout, Icon, Row, Col} from 'antd';
 import Card from "antd/lib/card";
 import {Meta} from "antd/lib/list/Item";
 import Avatar from "antd/lib/avatar";
@@ -68,6 +68,7 @@ class UserProfilePage extends Component {
     this.renderFollowing = this.renderFollowing.bind(this);
     this.renderFollowers = this.renderFollowers.bind(this);
     this.follow = this.follow.bind(this);
+    this.goTo = this.goTo.bind(this);
 
     if (this.props.self === false) this.getUser();
   }
@@ -387,11 +388,11 @@ class UserProfilePage extends Component {
   }
 
   renderFollowing() {
-    return <Following user={this.state.user} />;
+    return <Following self={this.props.self} user={this.state.user} />;
   }
 
   renderFollowers() {
-    return <Followers user={this.state.user} />;
+    return <Followers self={this.props.self} user={this.state.user} />;
   }
 
   follow() {
@@ -447,9 +448,12 @@ class UserProfilePage extends Component {
     return biographyText+isFollowing;
   }
 
-  render() {
-    // if (!this.state.user && this.props.self === false) return <div className="onAuthFail"><NotFoundPage/></div>;
+  goTo(path) {
+    const {history} = this.props.router;
+    history.push(path);
+  }
 
+  render() {
     return (
       <div className={'container'}>
         <Content className={'pt-3 row'}>
@@ -463,16 +467,40 @@ class UserProfilePage extends Component {
                 title={this.state.user.name}
                 description={this.getDescription(this.state.user)}
               />
-              <ButtonGroup className="mt-3">
+              <Row hidden={!this.props.self} className={'mt-4'}>
+                <Col span={8}>
+                  <Button
+                    block
+                    type={'link'}
+                    onClick={() => this.goTo('/profile/followers')}>
+                    {this.state.user.followers_count} Followers
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Button
+                    block
+                    type={'link'}
+                    onClick={() => this.goTo('/profile/following')}>
+                    {this.state.user.following_count} Following
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Button
+                    block
+                    type={'link'}
+                    onClick={() => this.goTo('/profile/questions')}>
+                    {this.state.questions.length} Questions
+                  </Button>
+                </Col>
+              </Row>
+              <ButtonGroup hidden={this.props.self} className="mt-3">
                 <Button
-                  hidden={this.props.self}
                   icon='question'
                   type={'danger'}
                   onClick={this.toggleQuestionModal}>
                   Ask
                 </Button>
                 <Button
-                  hidden={this.props.self}
                   type={this.state.user.is_followed ? 'danger' : 'success'}
                   loading={this.state.followInProgress}
                   icon={this.state.user.is_followed ? 'user-delete' : 'user-add'}
@@ -480,7 +508,7 @@ class UserProfilePage extends Component {
                   {this.state.user.is_followed ? 'Unfollow' : 'Follow'}
                 </Button>
                 <Button
-                  hidden={this.props.self || !this.state.user.show_twitter}
+                  hidden={!this.state.user.show_twitter}
                   type={'primary'}
                   icon="twitter"
                   onClick={this.openTwitter.bind(this)}>

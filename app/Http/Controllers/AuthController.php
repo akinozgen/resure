@@ -14,7 +14,10 @@
             $response = new Response();
 
             if (auth()->check()) {
-                $user = auth()->user()->toArray();
+                $user = auth()->user();
+                $user->followers_count = User::getFollowersCount($user->id);
+                $user->following_count = User::getFollowingCount($user->id);
+                $user = $user->toArray();
                 unset($user['twitter_data']);
                 $response->setContent([
                     'status' => true,

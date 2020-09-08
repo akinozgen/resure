@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {Loader} from "./helpers/Loader";
 import getFollowers from "../api/getFollowers";
 import BottomScrollListener from "react-bottom-scroll-listener";
+import Title from "antd/lib/typography/Title";
 
 class Followers extends React.Component {
   constructor(props) {
@@ -64,14 +65,14 @@ class Followers extends React.Component {
     return this.state.followers.map(follower => {
       return <Card className={'mb-2'}>
         <Comment
-          author={<Link to={`/@${follower.username}`}><h5 className={'mb-1'}>{follower.name}</h5></Link>}
+          author={<a href={`/@${follower.username}/questions`}><h5 className={'mb-1'}>{follower.name}</h5></a>}
           avatar={
-            <Link to={`/@${follower.username}`}>
+            <a href={`/@${follower.username}/questions`}>
               <Avatar
                 src={follower.profile_pic_url}
                 alt={`${follower.name} on resure.space`}
               />
-            </Link>
+            </a>
           }
           content={
             <p>
@@ -88,6 +89,9 @@ class Followers extends React.Component {
       debounce={500}
       onBottom={this.state.totalFollowers == this.state.followers.length ? () => null : this.loadNew}
       triggerOnNoScroll={false}>
+      <Title level={3}>
+        {this.props.self === true ? 'Your' : `${this.props.user.name}'s`} Followers
+      </Title>
       {this.renderFollowers()}
       {this.state.loading ? <Loader /> : null}
     </BottomScrollListener>;
